@@ -316,6 +316,12 @@ $(document).on('click', '#setAssignee', function() {
 $(document).on('click', '#btn-save-ticket', function() {
     const token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
+    if ($("#ticketId").length > 0) {
+        id = $("#ticketId").val()
+    } else {
+        id = 0
+    }
+
     title = $("#ticket_title").val()
     desc = $("#ticket_desc").val()
     category = $("#ticket_category").val();
@@ -326,6 +332,7 @@ $(document).on('click', '#btn-save-ticket', function() {
         return this.value;
     }).get()
     dueDate = $("#due-date").val();
+    console.log(assignees)
 
     fetch('/save_ticket', {
         method: 'POST',
@@ -335,6 +342,7 @@ $(document).on('click', '#btn-save-ticket', function() {
             'Content-Type':  'application/json'
         },
         body: JSON.stringify({
+            'id': id,
             'title': title,
             'desc': desc,
             'category': category,
@@ -347,15 +355,11 @@ $(document).on('click', '#btn-save-ticket', function() {
     .then(response => response.json())
     .then(res => {
         if (res.status == 200) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'Your offer has been saved successfully'
-            }).then((rslt) => {
-                if (rslt.isConfirmed) {
-                    location.reload();
-                }
-            })
+            if (id == 0) {
+                showSwalMsg("New ticket has been created successfully")
+            } else {
+                showSwalMsg("You ticket has been created successfully")
+            }
         } else {
             alert("Cannot save");
         }
@@ -364,6 +368,18 @@ $(document).on('click', '#btn-save-ticket', function() {
         alert(err)
     })
 })
+
+function showSwalMsg(msg) {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: msg
+    }).then((rslt) => {
+        if (rslt.isConfirmed) {
+            window.location.href = '/ticket_list/all'
+        }
+    })
+}
 
 function capitalizeText(str) {
     if (str.length === 0) return str;

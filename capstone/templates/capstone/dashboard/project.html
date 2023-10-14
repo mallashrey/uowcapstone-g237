@@ -21,7 +21,7 @@
                     {% for ticket in tickets %}
                     <tr>
                         <td style="font-size: 0.875rem; font-weight: 600;">
-                            <a href="{% url 'ticket_detail' ticket.ticket_title_slug %}" style="display: -webkit-box;
+                            <a href="{% url 'ticket_detail' ticket.id ticket.ticket_title_slug %}" style="display: -webkit-box;
                             overflow: hidden;
                             -webkit-line-clamp: 2;
                             -webkit-box-orient: vertical;

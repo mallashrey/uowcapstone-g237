@@ -6,7 +6,8 @@
         <div style="display: flex; flex-direction: column;">
             <div class="container test124">
                 <div style="padding: 20px;">
-                    <form id="msform">
+                    <form id="msform" action="{% url 'save_questionnaire' %}" method="post">
+                        {% csrf_token %}
                         <!-- progressbar -->
                         <ul id="progressbar">
                             <li class="active">Page 1</li>
@@ -16,11 +17,11 @@
                         <fieldset>
                             <div class="mb20">
                                 <label for="longTxt1">Describe which kind of vacations you typically enjoy and why</label>
-                                <textarea name="q1" class="css-r6q3am" cols="20" rows="5"></textarea>
+                                <textarea name="ess1" class="css-r6q3am" cols="20" rows="5"></textarea>
                             </div>
                             <div class="mb20">
                                 <label for="longTxt2">Describe what type of hobbies you enjoy and why</label>
-                                <textarea name="q1" class="css-r6q3am" cols="20" rows="5"></textarea>
+                                <textarea name="ess2" class="css-r6q3am" cols="20" rows="5"></textarea>
                             </div>
                             
                             
@@ -220,9 +221,5 @@ $(".previous").click(function(){
 		easing: 'easeInOutBack'
 	});
 });
-
-$(".submit").click(function(){
-	return false;
-})
 </script>
 {% endblock %}

@@ -11,8 +11,15 @@ from datetime import datetime
 
 from .models import *
 from .constant import *
+# from .mbti_functions import *
 
 import json
+# import pandas as pd
+# import tensorflow as tf
+
+# from transformers import TFBertModel, BertTokenizer
+# from keras.models import load_model
+# from keras.utils import pad_sequences
 # Create your views here.
 
 @login_required
@@ -268,21 +275,15 @@ def createTicket(request):
         })
     
 @login_required
-def ticketDetail(request, ticket_name):
+def ticketDetail(request, ticket_id, ticket_name):
     ticketName = ticket_name.replace('-', ' ')
-    ticketDetail = Ticket.objects.get(ticket_title__icontains=ticketName)
+    ticketDetail = Ticket.objects.get(pk=ticket_id)
     categories = Category.objects.all()
     categoryRoles = CategoryRole.objects.all()
     watchers = User.objects.filter(dept=1)
 
     watcherIds = ', '.join([str(watcher.id) for watcher in ticketDetail.watcher.all()])
-    print(watcherIds)
-
-    print(ticketDetail.watcher)
-    if 0 in STATUS:
-        print("yes")
-    else:
-        print("no")
+    assignees = ', '.join([assignee.username for assignee in ticketDetail.assigned_to.all()])
     
     return render(request, "capstone/ticket/ticket_detail.html", {
         "ticketDetail": ticketDetail,
@@ -292,6 +293,7 @@ def ticketDetail(request, ticket_name):
         "categoryRoles": categoryRoles,
         "watchers": watchers,
         "watcherIds": watcherIds,
+        "assignees": assignees.split(', '),
         "titleHeader": "Ticket Detail" ,
         "subTitleHeader": "This is an example dashboard created using build-in elements and components."
     })
@@ -299,35 +301,68 @@ def ticketDetail(request, ticket_name):
 @login_required
 def saveTicket(request):
     data = json.loads(request.body)
-
-    ticket = Ticket(
-        ticket_title = data["title"],
-        description = data["desc"],
-        category_id = data["category"],
-        priority = data["priority"],
-        requester_id = request.user.id,
-        due_date = data["dueDate"]
-    )
-
-    ticket.save()
-
-    if "watchers" in data and "assignees" in data:
-        watchers = data["watchers"]
-        assignees = data["assignees"]
-        if watchers:
-            watcherTicket = Ticket.objects.get(id=ticket.id)
-            watcherTicket.watcher.add(*watchers)
-
-        if assignees:
-            assigneeTicket = Ticket.objects.get(id=ticket.id)
-            assignees = [val.lower() for val in assignees]
-            userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
-            assigneeTicket.assigned_to.add(*list(userId))
+    ticketId = data["id"]
     
-    return JsonResponse({
-        "msg": "success",
-        "status": 200
-    }, status=200)
+    if ticketId == 0:
+        ticket = Ticket(
+            ticket_title = data["title"],
+            description = data["desc"],
+            category_id = data["category"],
+            priority = data["priority"],
+            requester_id = request.user.id,
+            due_date = data["dueDate"]
+        )
+
+        ticket.save()
+
+        if "watchers" in data and "assignees" in data:
+            watchers = data["watchers"]
+            assignees = data["assignees"]
+            if watchers:
+                watcherTicket = Ticket.objects.get(id=ticket.id)
+                watcherTicket.watcher.add(*watchers)
+
+            if assignees:
+                assigneeTicket = Ticket.objects.get(id=ticket.id)
+                assignees = [val.lower() for val in assignees]
+                userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
+                assigneeTicket.assigned_to.add(*list(userId))
+        
+        return JsonResponse({
+            "msg": "success",
+            "status": 200
+        }, status=200)
+    else:
+        
+        try:
+            updateTicket = Ticket.objects.get(id=ticketId)
+        except Ticket.DoesNotExist:
+            updateTicket = ""
+        
+        if updateTicket:
+            updateTicket.ticket_title = data["title"]
+            updateTicket.description = data["desc"]
+            updateTicket.category_id = data["category"]
+            updateTicket.priority = data["priority"]
+            updateTicket.due_date = data["dueDate"]
+            updateTicket.save()
+
+            # if "watchers" in data and "assignees" in data:
+            #     watchers = data["watchers"]
+            #     assignees = data["assignees"]
+            #     if watchers:
+            #         updateTicket.watcher.set(*watchers)
+
+            return JsonResponse({
+                "msg": "update success",
+                "status": 200
+            }, status=200)
+        else:
+            return JsonResponse({
+                "msg": "ticket is not found",
+                "status": 404
+            }, status=404)
+
 
 @login_required
 def mbtiResult(request, username):
@@ -446,19 +481,56 @@ def saveQuestionnaire(request):
     ess1 = request.POST["ess1"]
     ess2 = request.POST["ess2"]
 
-    questionnaire = Questionnaire(
-        opt_ans1 = q1,
-        opt_ans2 = q2,
-        opt_ans3 = q3,
-        opt_ans4 = q4,
-        txt_ans1 = ess1,
-        txt_ans2 = ess2,
-        user_id = request.user.id
-    )
-    questionnaire.save()
+    # questionnaire = Questionnaire(
+    #     opt_ans1 = q1,
+    #     opt_ans2 = q2,
+    #     opt_ans3 = q3,
+    #     opt_ans4 = q4,
+    #     txt_ans1 = ess1,
+    #     txt_ans2 = ess2,
+    #     user_id = request.user.id
+    # )
+    # questionnaire.save()
+
+    sentences = ess1 + " " + ess2
+    execMBTIModel(sentences)
 
     messages.success(request, "You have submitted the questionnaire", extra_tags="MBTI Questionnaire")
-    return HttpResponseRedirect(reverse('mbti', args=[request.user.username]))
+    return HttpResponseRedirect(reverse('mbti_result', args=[request.user.username]))
+
+def execMBTIModel(sentences):
+    cols = ['INTJ', 'INTP', 'ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'INFJ', 'INFP']
+
+    colnames = ['sentence']
+    colnames = colnames+cols
+
+    with tf.keras.utils.custom_object_scope({"TFBertModel": TFBertModel}):
+        model = load_model("capstone/ml_model/bert_uncased_model_new_10.h5")
+    
+    bert_model_name = 'bert-base-uncased'
+    max_token = 512
+    tokenizer = BertTokenizer.from_pretrained(bert_model_name, do_lower_case=True)
+    
+    df_predict = pd.DataFrame(columns = colnames)
+    sentence = sentences
+
+    df_predict.loc[0, 'sentence'] = sentence
+
+    sentences = pd.Series(sentence)
+        
+    sentence_inputs = tokenize_sentences(df_predict['sentence'], tokenizer, max_token)
+    sentence_inputs = pad_sequences(sentence_inputs, maxlen=max_token, dtype="long", value=0, truncating="post", padding="post")
+    prediction = model.predict(sentence_inputs)
+    
+    df_predict.loc[0, cols] = prediction
+    data = df_predict.loc[0, cols]
+    
+    sorted_data = sorted(data.items(), key=lambda x: x[1], reverse=True)
+
+    top_3_values = sorted_data[:3]
+    print(top_3_values)
+    return top_3_values
+
 
 @login_required
 def notification(request):

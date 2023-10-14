@@ -30,14 +30,6 @@ ROLE = (
     ('SM', 'Software Maintainer')
 )
 
-# DEPARTMENT = (
-#     (1, 'IT'),
-#     (1, 'IT'),
-#     (1, 'IT'),
-#     (1, 'IT'),
-#     (1, 'IT')
-# )
-
 class User(AbstractUser):
     img_profile = models.CharField(max_length=100, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
