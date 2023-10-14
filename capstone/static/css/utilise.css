@@ -1,0 +1,141 @@
+.mt5 {
+    margin-top: 5px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb5 {
+    margin-bottom: 5px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.mb30 {
+    margin-bottom: 30px;
+}
+
+.mb50 {
+    margin-bottom: 50px;
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.b-rad10 {
+    border-radius: 10px;
+}
+
+.dflex {
+    display: flex;
+}
+
+.alg-cen {
+    align-items: center;
+}
+
+.alg-bal {
+    align-items: baseline;
+}
+
+.jst-cen {
+    justify-content: center;
+}
+
+.jst-spc-btw {
+    justify-content: space-between;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.gap10 {
+    gap: 10px;
+}
+
+.gap15 {
+    gap: 15px;
+}
+
+.gap20 {
+    gap: 20px;
+}
+
+.amber {
+    color: #ffc851;
+}
+
+.delete {
+    color: #ff5a37;
+}
+
+.btn {
+    display: inline-block;
+    font-size: .8rem;
+    cursor: pointer;
+}
+
+.btn-cap-primary {
+    position: relative;
+    box-sizing: border-box;
+    border: 0px;
+    font-weight: 700;
+    line-height: 1.4;
+    transition: all 150ms ease-in 0s;
+    box-shadow: rgba(0, 0, 0, 0.11) 0rem 0.25rem 0.4375rem -0.0625rem, rgba(0, 0, 0, 0.07) 0rem 0.125rem 0.25rem -0.0625rem;
+    padding: 8px 16px;
+    background-color: rgb(0, 117, 255);
+    color: rgb(255, 255, 255);
+    border-radius: 20px;
+}
+
+.btn-cap-outline-danger {
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid #d25500;
+    ;
+    font-weight: 700;
+    line-height: 1.4;
+    transition: all 150ms ease-in 0s;
+    box-shadow: rgba(0, 0, 0, 0.11) 0rem 0.25rem 0.4375rem -0.0625rem, rgba(0, 0, 0, 0.07) 0rem 0.125rem 0.25rem -0.0625rem;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #d25500;
+    border-radius: 20px;
+}
+
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #d92550;
+}
+
+.was-validated .form-caps:invalid~.invalid-feedback,
+.was-validated .form-caps:invalid:read-only~.invalid-feedback,
+.form-caps.is-invalid~.invalid-feedback,
+.form-caps.is-invalid:read-only~.invalid-feedback {
+    display: block;
+}
+
+.form-caps:invalid:read-only {
+    background: red;
+}
+
+/* .form-caps:invalid:read-only + .invalid-feedback::after {
+    display: block;
+} */

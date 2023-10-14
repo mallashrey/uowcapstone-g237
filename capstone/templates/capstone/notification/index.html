@@ -1,0 +1,37 @@
+{% extends 'capstone/layout.html' %}
+
+{% block body %}
+<div class="container-card dash-card mt20 mb50">
+    <div style="padding: 20px;">
+        <div class="app-card__header_title" style="margin-bottom: 2.25rem;">
+            Notifications
+        </div>
+        <div class="app-card__body">
+            {% for notif in notifications %}
+            <div class="dflex gap20">
+                <div>
+                    {% if notif.creator.img_profile %}
+                    <img width="42" class="rounded-circle" src="/static/{{notif.creator.img_profile}}" alt="">
+                    {% else %}
+                    <img width="42" class="rounded-circle" src="/static/images/user-icon.png" alt="">
+                    {% endif %}
+                </div>
+                <div class="dflex" style="flex-direction: column;">
+                    <div class="mb10">
+                        {% if is_read == false %}
+                        New message!
+                        {% endif %}
+                        New task has been created. 
+                        <a href="{% url 'ticket_detail' notif.notif_ticket_title_slug %}">{{ notif.ticket.ticket_title }}</a>
+                    </div>
+                    <div class="dflex gap10">
+                        <span><i class="fa-solid fa-clock"></i></span>
+                        <span>time</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

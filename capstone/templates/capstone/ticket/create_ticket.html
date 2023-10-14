@@ -1,0 +1,188 @@
+{% extends 'capstone/layout.html' %}
+
+{% block body %}
+<div class="container-card dash-card mt20 mb50">
+    <div style="padding: 20px;">
+        
+        {% csrf_token %}
+        <div class="col-md-12 dflex gap15 mb10 mt10">
+            <div class="comment-form">
+                <textarea oninput='this.style.height="";this.style.height = this.scrollHeight + "px"'
+                    id="ticket_title" class="form-caps" name="ticket_title" placeholder="Put your ticket title"
+                    rows="1" required></textarea>
+                <div class="invalid-feedback">
+                    Ticket title cannot be empty
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 dflex gap15 mb20">
+            <div class="comment-form">
+                <textarea oninput='this.style.height="";this.style.height = this.scrollHeight + "px"'
+                    id="ticket_desc" class="form-caps" name="ticket_description" placeholder="Put your ticket description" rows="1"
+                    style="font-size: 1rem;" required></textarea>
+                <div class="invalid-feedback">
+                    Ticket description cannot be empty
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 dflex gap20">
+            <div class="dflex gap15 mb20">
+                <div class="css-vz2i8e">
+                    <div class="css-63xtou">
+                        <label class="css-1bw07gz" style="color: #b0b0b0;">Category</label>
+                    </div>
+                    <div class="form-control-wrapper">
+                        
+                        <select id="ticket_category" name="category" class="form-caps select-input-category" required>
+                        
+                            <option selected>Select Category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}"> {{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
+                            <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <div class="invalid-feedback">
+                        Category cannot be empty
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 dflex gap20">
+            <div class="dflex gap15 mb20">
+                <div class="css-vz2i8e">
+                    <div class="css-63xtou">
+                        <label class="css-1bw07gz" style="color: #b0b0b0;">Priority</label>
+                    </div>
+                    <div class="form-control-wrapper">
+                        <select id="ticket_priority" class="form-caps form-select" name="priority" style="background: transparent;
+                        outline: none; width: 100%;
+                        border: none; z-index: 1;
+                        padding: 12px 15px; cursor: pointer; font-size: .88rem;" required>
+                            <option selected>Select Priority</option>
+                            {% for pr in priority %}
+                                <option value="{{ pr.0 }}"> {{ pr.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
+                            <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <div class="invalid-feedback">
+                        Priority cannot be empty
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if request.user.is_manager %}
+        <div class="dflex gap20 alg-bal">
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou dflex alg-bal jst-spc-btw">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Watcher</label>
+                        </div>
+                        <div class="form-control-wrapper">
+                            <select id="watcher" class="form-caps form-select js-example-basic-multiple" multiple="multiple" name="watchers[]" style="background: transparent;
+                            outline: none; width: 100%;
+                            border: none; z-index: 1;
+                            padding: 12px 15px; cursor: pointer; font-size: .88rem;" data-placeholder="Select Watcher">
+                                <option></option>
+                                {% for watcher in watchers %}
+                                    <option value="{{ watcher.id }}"> {{ watcher.username|title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20" style="width: 100%;">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou dflex alg-bal jst-spc-btw">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Assigned to</label>
+                            <div class="add-user-container" id="add_assignee">
+                                <i class="fa-solid fa-circle-plus"></i>
+                                <span>Add more</span>
+                            </div>
+                        </div>
+                        <div id="assigned_to" class="dflex flex-col">
+                            <input type="text" name="assigned_to[]" class="form-caps form-input assigned-input" placeholder="Select Assigned to" autocomplete="off" required>
+                            <!-- <input type="text" name="assigned_to[]" class="form-caps form-input assigned-input" onclick="selectAssignee(this);" placeholder="Select Assigned to" required> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-3 dflex gap15 mb20">
+            <div class="css-vz2i8e">
+                <div class="css-63xtou">
+                    <label class="css-1bw07gz" style="color: #b0b0b0;">Due Date</label>
+                </div>
+                <div class="form-control-wrapper">
+                    <div>
+                        <input type="text" class="form-control date-text" name="due_date" id="due-date" placeholder="yyyy-mm-dd">
+                    </div>
+                    <div style="padding: 0 12px;">
+                        <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gap20" style="display: flex; justify-content: center;">
+            <button class="btn btn-cap-primary" id="btn-save-ticket">Save</button>
+            <button class="btn btn-cap-outline-danger" href="javascript:void(0);" onclick="history.go(-1);">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+        const validateDate = document.getElementById('date-validation-error')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+
+                    const datepickerInput = document.getElementById('due-date');
+                    const selectedDate = datepickerInput._flatpickr.selectedDates[0];
+
+                    if (!selectedDate) {
+                        event.preventDefault(); // Prevent form submission
+                        
+                        if (validateDate) {
+                            validateDate.style.display = 'block'
+                        }
+                    }
+                }, false)
+            })
+
+        flatpickr("#due-date", {
+            minDate: "today",
+        })
+    })
+
+</script>
+
+{% block posts %}
+    {% include "capstone/assigned_to_template.html" %}
+{% endblock %}
+{% endblock %}

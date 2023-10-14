@@ -1,0 +1,70 @@
+<div class="row mb30" style="width: calc(100% + 24px); gap: 20px;">
+    <a href="{% url 'ticket_list' 'all' %}" class="task-card">
+        <div class="card widget-content bg-plum-plate  b-rad10">
+            <div class="widget-content-wrapper text-white" style="gap: 20px;">
+                <div class="widget-content-left">
+                    <div class="widget-heading">All Tickets</div>
+                    <div class="widget-subheading">{{ allTicket }}</div>
+                </div>
+                <div class="icon-overlay-card">
+                    <i class="fa-solid fa-hourglass-start" style="font-size: 1.25rem;"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    <a href="{% url 'ticket_list' 'outstanding' %}" class="task-card">
+        <div class="card widget-content bg-malibu-beach b-rad10">
+            <div class="widget-content-wrapper text-white" style="gap: 20px;">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Outstanding</div>
+                    <div class="widget-subheading">{{ outstanding }}</div>
+                </div>
+                <!-- <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span>1896</span></div>
+                </div> -->
+                <div class="icon-overlay-card">
+                    <i class="fa-solid fa-hourglass-start" style="font-size: 1.25rem;"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    <a href="{% url 'ticket_list' 'resolved' %}" class="task-card">
+        <div class="card widget-content bg-grow-early b-rad10">
+            <div class="widget-content-wrapper text-white" style="gap: 20px;">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Resolved</div>
+                    <div class="widget-subheading">{{ resolved }}</div>
+                </div>
+                <div class="icon-overlay-card">
+                    <i class="fa-solid fa-hourglass-start" style="font-size: 1.25rem;"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    <a href="{% url 'ticket_list' 'due_today' %}" class="task-card">
+        <div class="card widget-content bg-sunny-morning b-rad10">
+            <div class="widget-content-wrapper text-white" style="gap: 20px;">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Due Today</div>
+                    <div class="widget-subheading">{{ dueToday }}</div>
+                </div>
+                <div class="icon-overlay-card">
+                    <i class="fa-solid fa-hourglass-start" style="font-size: 1.25rem;"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    <a href="{% url 'ticket_list' 'overdue' %}" class="task-card">
+        <div class="card widget-content bg-strong-bliss b-rad10">
+            <div class="widget-content-wrapper text-white" style="gap: 20px;">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Overdue</div>
+                    <div class="widget-subheading">{{ overdue }}</div>
+                </div>
+                <div class="icon-overlay-card">
+                    <i class="fa-solid fa-hourglass-start" style="font-size: 1.25rem;"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>

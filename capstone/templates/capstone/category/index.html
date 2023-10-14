@@ -1,0 +1,44 @@
+{% extends 'capstone/layout.html' %}
+
+{% block body %}
+<!-- <svg viewBox="0 0 640 512" fill="currentColor" class="menu-icon">
+    <path d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H512c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm96 64a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm104 0c0-13.3 10.7-24 24-24H448c13.3 0 24 10.7 24 24s-10.7 24-24 24H224c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24H448c13.3 0 24 10.7 24 24s-10.7 24-24 24H224c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24H448c13.3 0 24 10.7 24 24s-10.7 24-24 24H224c-13.3 0-24-10.7-24-24zm-72-64a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM96 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+</svg> -->
+
+{% csrf_token %}
+<div class="container-card dash-card mt20 mb50">
+    <div style="padding: 20px;">
+        <div class="app-card__header_title" style="margin-bottom: 2.25rem;">
+            Projects
+        </div>
+        <div class="app-card__body">
+            
+            <a class="mb-4 mr-2 btn btn-success" href="{% url 'add_category' %}">Add new category</a>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="table-th-header" scope="col" style="width:45%;">Category Name</th>
+                        <th class="table-th-header" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">{{ cat.name }}</td>
+                        <td>
+                            <a href="{% url 'edit_category' cat.id %}" title="Edit">
+                                <i class="metismenu-icon far fa-edit amber mr-3"></i>
+                            </a>
+                            <a href="#" title="Delete" onclick="delete_data('delete_category', '{{ cat.id }}')">
+                                <i class="metismenu-icon far fa-trash-alt delete"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

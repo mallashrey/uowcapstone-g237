@@ -1,0 +1,20 @@
+{% extends 'capstone/layout.html' %}
+
+{% block body %}
+<div>
+    <form action="{% url 'edit_category' category.id %}" method="POST">
+        {% csrf_token %}
+        <div class="mb-3 row" style="align-items: center;">
+            <label for="inputPassword" class="col-sm-2 css-1bw07gz">Category</label>
+            <div class="col-md-4">
+              <input type="text" class="css-r6q3am" name="category" value="{{category.name}}" placeholder="Enter your category name">
+            </div>
+        </div>
+        <div class="col-sm-10 mt-5 offset-sm-2">
+            <button class="btn btn-cap-primary mr10" type="submit">Save</button>
+            <button class="btn btn-cap-outline-danger" href="javascript:void(0);" onclick="history.go(-1);">Cancel</button>
+        </div>
+    </form>
+    
+</div>
+{% endblock %}

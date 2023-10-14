@@ -1,0 +1,27 @@
+{% extends 'capstone/layout.html' %}
+
+{% block body %}
+
+<div class="container-card dash-card mt20 mb50">
+    <div style="padding: 20px;">
+        <div class="app-card__header_title" style="margin-bottom: 2.25rem;">
+            Projects
+        </div>
+        <div class="app-card__body">
+            <form action="{% url 'add_category' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3 row" style="align-items: center;">
+                    <label for="inputPassword" class="col-sm-2 css-1bw07gz">Category</label>
+                    <div class="col-md-4">
+                        <input type="text" class="css-r6q3am" name="category" data-id="10" placeholder="Enter your category name">
+                    </div>
+                </div>
+                <div class="col-sm-10 mt-5 offset-sm-2">
+                    <button class="btn btn-cap-primary mr10" type="submit">Save</button>
+                    <button class="btn btn-cap-outline-danger" href="javascript:void(0);" onclick="history.go(-1);">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

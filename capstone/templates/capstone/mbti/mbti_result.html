@@ -1,0 +1,118 @@
+{% extends 'capstone/layout.html' %}
+{% load custom_filter %}
+{% block body %}
+
+{% if personalities %}
+<div class="mb50" style="display: flex; gap: 20px;">
+    <div class="container-card dash-card mbti-card-res" style="height: 630px;">
+        <div style="padding: 20px;">
+            <div class="app-card__body card-outline ">
+                <div class="card_header mb10">
+                    <div class="image_wrap mb10">
+                        <div class="card_cover"></div>
+                        {% if request.user.img_profile %}
+                        <img src="/static/{{request.user.img_profile}}" alt="">
+                        {% else %}
+                        <img src="/static/images/user-icon.png" alt="">
+                        {% endif %}
+                    </div>
+                    <div style="position: relative; font-size: 1.5rem; letter-spacing: 1px; color: #fff; font-weight: 600;">
+                        {{ request.user.first_name }} {{ request.user.last_name }}
+                    </div>
+                </div>
+                <div style="width: 100%; display: flex; flex-direction: column ;gap: 15px; align-items: center;">
+                    <div style="color: #fff; text-align: center; position: relative;">Your MBTI Result</div>
+                    <div>
+                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <svg class="radial-progress" data-percentage="{{ personalities.first.value }}" viewBox="0 0 80 80">
+                                <defs>
+                                    <linearGradient id="linear" x1="10%" y1="90%" x2="0%" y2="10%">
+                                        <stop offset="0%" stop-color="#3fffa2" />
+                                        <stop offset="50%" stop-color="#ffdb3a" />
+                                        <stop offset="100%" stop-color="#ff6363" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                                <circle class="complete" cx="40" cy="40" r="35"
+                                    style="stroke-dashoffset: 147.3406954533613;"></circle>
+                                <text class="percentage count" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">{{ personalities.first.value }}</text>
+                            </svg>
+                            <h3 class="card-text-body">{{ personalities.first.mbti_type }}</h3>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-around; width: 100%;">
+                        {% for res in personalities %}
+                            {% if not forloop.first %}
+                            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                <svg class="radial-progress low" data-percentage="{{ res.value }}" viewBox="0 0 80 80">
+                                    <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                                    <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 147.3406954533613;"></circle>
+                                    <text class="percentage count" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">{{ res.value }}%</text>
+                                </svg>
+                                <div class="card-text-body">{{ res.mbti_type }}</div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        <div style="color: #fff; text-align: right; padding: 0 10px 10px;">as of 03/03/2023</div>
+
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="container-card dash-card">
+            <div style="padding: 20px;">
+                <div class="app-card__header_title" style="margin-bottom: 1.5rem;">
+                    Personality Description
+                </div>
+                <div class="app-card__body" style="color: #fff;">
+                    <div class="mb10">Based on your MBTI results, we found that Software Designer is the best fit for you, and following are Software Tester and Software Maintainer!</div>
+                    <div>
+                        <ul>
+                            {% for mbti in personalities %}
+                            <li class="mb10">
+                                <div style="font-size: 1.1rem; font-weight: 600; letter-spacing: 1px;">{{ mbti.mbti_type }}</div>
+                                <div style="color: rgb(180 187 197); font-size: 15px; letter-spacing: .3px;">{{ mbti.mbti_type|mbtiType }}</div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-card dash-card">
+            <div style="padding: 20px;">
+                <div class="app-card__header_title" style="margin-bottom: 1rem;">
+                    Role Preferences
+                </div>
+                <div class="app-card__body" style="color: #fff;">
+                    <div>
+                        {% for role in roles %}
+                            <div style="{% if role.is_best %} font-weight: 700; font-size: 16px; {% endif %}">{{ role.role_type.role_name }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{% else %}
+
+<div style="color: #fff;">
+    <span>You haven't taken the MBTI test.</span>
+    
+    <span>
+        <a href="{% url 'questionnaire' request.user.username %}" style="color: #fedc3d!important;">
+            Please do the test here.
+        </a>
+    </span>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends 'capstone/layout.html' %}
+
+{% block body %}
+<div class="container-card dash-card mt20 mb50">
+    <div>
+        <div style="display: flex; flex-direction: column;">
+            <div class="container test124">
+                <div style="padding: 20px;">
+                    <form id="msform">
+                        <!-- progressbar -->
+                        <ul id="progressbar">
+                            <li class="active">Page 1</li>
+                            <li>Page 2</li>
+                        </ul>
+                        <!-- fieldsets -->
+                        <fieldset>
+                            <div class="mb20">
+                                <label for="longTxt1">Describe which kind of vacations you typically enjoy and why</label>
+                                <textarea name="q1" class="css-r6q3am" cols="20" rows="5"></textarea>
+                            </div>
+                            <div class="mb20">
+                                <label for="longTxt2">Describe what type of hobbies you enjoy and why</label>
+                                <textarea name="q1" class="css-r6q3am" cols="20" rows="5"></textarea>
+                            </div>
+                            
+                            
+                            <input type="button" name="next" class="next action-button" value="Next"/>
+                        </fieldset>
+                        <fieldset>
+                            <div style="text-align: center; ">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 250px;">
+                                            Attend social activities and events where I can be surrounded by people, meet and talk to new
+                                            people
+                                        </div>
+                                        <div style="width: 200px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q1" value="1">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q1" value="2">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q1" value="3">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q1" value="4">
+                                            </span>
+                                        </div>
+                                        <div style="width: 250px;">
+                                            Be alone and enjoy some quite time by myself
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 250px;">
+                                            Technical and hands-on
+                                        </div>
+                                        <div style="width: 200px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q2" value="1">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q2" value="2">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q2" value="3">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q2" value="4">
+                                            </span>
+                                        </div>
+                                        <div style="width: 250px;">
+                                            Artistic and imaginative
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 250px;">
+                                            Those that allow me to learn new things
+                                        </div>
+                                        <div style="width: 200px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q3" value="1">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q3" value="2">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q3" value="3">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q3" value="4">
+                                            </span>
+                                        </div>
+                                        <div style="width: 250px;">
+                                            Those that give me an escape from reality and let me get connected with my artistic side
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 250px;">
+                                            To be completely spontaneous without any pre-booked activities
+                                        </div>
+                                        <div style="width: 200px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q4" value="1">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q4" value="2">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q4" value="3">
+                                            </span>
+                                            <span style="margin-right: 10px;">
+                                                <input class="form-check-input" type="radio" name="q4" value="4">
+                                            </span>
+                                        </div>
+                                        <div style="width: 250px;">
+                                            To have everything organised and booked in advance
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                                <input type="submit" name="submit" class="submit action-button" value="Submit"/>
+                            </div>
+                            
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+//jQuery time
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+
+$(".next").click(function(){
+	if(animating) return false;
+	animating = true;
+	
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+	
+	//activate next step on progressbar using the index of next_fs
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
+	//show the next fieldset
+	next_fs.show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale current_fs down to 80%
+			scale = 1 - (1 - now) * 0.2;
+			//2. bring next_fs from the right(50%)
+			left = (now * 50)+"%";
+			//3. increase opacity of next_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({
+        'transform': 'scale('+scale+')',
+        'position': 'absolute'
+      });
+			next_fs.css({'left': left, 'opacity': opacity});
+		}, 
+		duration: 800, 
+		complete: function(){
+			current_fs.hide();
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+
+$(".previous").click(function(){
+	if(animating) return false;
+	animating = true;
+	
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	
+	//de-activate current step on progressbar
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	
+	//show the previous fieldset
+	previous_fs.show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale previous_fs from 80% to 100%
+			scale = 0.8 + (1 - now) * 0.2;
+			//2. take current_fs to the right(50%) - from 0%
+			left = ((1-now) * 50)+"%";
+			//3. increase opacity of previous_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({'left': left});
+			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+		}, 
+		duration: 800, 
+		complete: function(){
+			current_fs.hide();
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+
+$(".submit").click(function(){
+	return false;
+})
+</script>
+{% endblock %}
