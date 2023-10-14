@@ -18,8 +18,8 @@ import pandas as pd
 import tensorflow as tf
 
 from transformers import TFBertModel, BertTokenizer
-# from keras.models import load_model
-# from keras.utils import pad_sequences
+from keras.models import load_model
+from keras.utils import pad_sequences
 # Create your views here.
 
 @login_required
@@ -493,8 +493,7 @@ def saveQuestionnaire(request):
     # questionnaire.save()
 
     sentences = ess1 + " " + ess2
-    # execMBTIModel(sentences)
-    print(sentences)
+    execMBTIModel(sentences)
 
     messages.success(request, "You have submitted the questionnaire", extra_tags="MBTI Questionnaire")
     return HttpResponseRedirect(reverse('mbti_result', args=[request.user.username]))
