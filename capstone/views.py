@@ -11,13 +11,13 @@ from datetime import datetime
 
 from .models import *
 from .constant import *
-# from .mbti_functions import *
+from .mbti_functions import *
 
 import json
-# import pandas as pd
-# import tensorflow as tf
+import pandas as pd
+import tensorflow as tf
 
-# from transformers import TFBertModel, BertTokenizer
+from transformers import TFBertModel, BertTokenizer
 # from keras.models import load_model
 # from keras.utils import pad_sequences
 # Create your views here.
@@ -493,7 +493,8 @@ def saveQuestionnaire(request):
     # questionnaire.save()
 
     sentences = ess1 + " " + ess2
-    execMBTIModel(sentences)
+    # execMBTIModel(sentences)
+    print(sentences)
 
     messages.success(request, "You have submitted the questionnaire", extra_tags="MBTI Questionnaire")
     return HttpResponseRedirect(reverse('mbti_result', args=[request.user.username]))

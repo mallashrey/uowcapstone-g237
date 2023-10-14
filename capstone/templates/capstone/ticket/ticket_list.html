@@ -103,8 +103,8 @@
                         </td>
                         <td>
                             <div class="css-xgstl5">
-                                {% if task.assigned_to.all %}
-                                    {% for user in task.assigned_to.all %}
+                                {% if ticket.watcher.all %}
+                                    {% for user in ticket.watcher.all %}
                                     <div class="css-1wdn32l" data-toggle="tooltip" data-title="{{user.username}}">
                                         {% if user.img_profile %}
                                         <img  class="rounded-circle css-u226zh" src="/static/{{user.img_profile}}" alt="">
