@@ -30,6 +30,7 @@ Follow these steps to set up the project:
    pip install virtualenv
 
    ### For Mac
+   ```bash
    pip3 install virtualenv
    
    
