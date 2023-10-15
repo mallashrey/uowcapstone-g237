@@ -66,7 +66,7 @@ def index(request):
         "notifications": notifications,
         "iconTitle": ICONS[0],
         "titleHeader": "Dashboard",
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "This dasboard is intended to show the tickets progress and personality."
     })
 
 @login_required
@@ -77,7 +77,7 @@ def category(request):
         "categories": categories,
         "iconTitle": ICONS[1],
         "titleHeader": "Category",
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "Shows all categories"
     })
 
 @login_required
@@ -99,7 +99,7 @@ def addCategory(request):
     else:
         return render(request, "capstone/category/create.html", {
             "titleHeader": "Add Category",
-            "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+            "subTitleHeader": "This page is used to create new category"
         })
     
 @login_required
@@ -121,7 +121,7 @@ def editCategory(request, id):
         return render(request, "capstone/category/edit.html", {
             "category": category,
             "titleHeader": "Edit Category",
-            "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+            "subTitleHeader": "This page is used to edit category name."
         })
     
 @login_required
@@ -185,7 +185,7 @@ def createTicket(request):
             "requesters": requesters,
             "iconTitle": ICONS[2],
             "titleHeader": "Create New Ticket",
-            "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+            "subTitleHeader": "This page is intended to create a ticket for all users."
         })
     
 @login_required
@@ -209,7 +209,7 @@ def ticketDetail(request, ticket_id, ticket_name):
         "watcherIds": watcherIds,
         "assignees": assignees.split(', '),
         "titleHeader": "Ticket Detail" ,
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "You can update and view the ticket detail that has been created."
     })
     
 @login_required
@@ -294,7 +294,7 @@ def mbtiResult(request, username):
             "roles": roles,
             "iconTitle": ICONS[5],
             "titleHeader": "MBTI Result" ,
-            "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+            "subTitleHeader": "This page is intended to show your MBTI personality."
         })
     else:
         return render(request, "capstone/mbti/mbti_result.html")
@@ -334,7 +334,7 @@ def ticketList(request, ticket_name):
         "overdue" : len(overdue),
         "iconTitle": ICONS[3],
         "titleHeader": ticket_name.replace("_", " ").capitalize() + " Tickets" ,
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "This page shows status of all tickets that has been created."
     })
 
 def getTickets(ticket_name, is_manager=False, userId=""):
@@ -393,7 +393,7 @@ def notification(request):
     return render(request, "capstone/notification/index.html", {
         "notifications": notifications,
         "titleHeader": "Notifications" ,
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "This page is intended to show you all incoming notifications."
     })
 
 
