@@ -88,6 +88,7 @@ Follow these steps to set up the project:
 10. User Password
 
     ### Manager account
+    ```bash
     username: ferry
     password: password
     or
@@ -100,10 +101,13 @@ Follow these steps to set up the project:
     username: musong
     password: password
     or
-    username: anne
+    username: jenna
     password: password
+    ```
+    
 
     ### User account
+    ```bash
     username: user
     password: password
     or
@@ -112,6 +116,8 @@ Follow these steps to set up the project:
     or
     username: user3
     password: password
+    ```
+    
 
 
    
