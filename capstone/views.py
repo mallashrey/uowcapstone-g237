@@ -150,7 +150,6 @@ def deleteCategory(request, id):
 #         "tickets": tickets
 #     })
 
-@login_required
 def saveNotification(notif, ticketId, requester):
 
     if notif == 1:
@@ -161,7 +160,6 @@ def saveNotification(notif, ticketId, requester):
                 ticket_id = ticketId,
                 send_to_id = u.id,
                 creator_id = requester
-
             )
             notification.save()
 
@@ -228,25 +226,22 @@ def saveTicket(request):
             due_date = data["dueDate"]
         )
 
-        watchers = data["watchers"]
-        print(type(watchers))
+        ticket.save()
 
-        # ticket.save()
+        if "watchers" in data and "assignees" in data:
+            watchers = data["watchers"]
+            assignees = data["assignees"]
+            if watchers:
+                watcherTicket = Ticket.objects.get(id=ticket.id)
+                watcherTicket.watcher.add(*watchers)
 
-        # if "watchers" in data and "assignees" in data:
-        #     watchers = data["watchers"]
-        #     assignees = data["assignees"]
-        #     if watchers:
-        #         watcherTicket = Ticket.objects.get(id=ticket.id)
-        #         watcherTicket.watcher.add(*watchers)
+            if assignees:
+                assigneeTicket = Ticket.objects.get(id=ticket.id)
+                assignees = [val.lower() for val in assignees]
+                userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
+                assigneeTicket.assigned_to.add(*list(userId))
 
-        #     if assignees:
-        #         assigneeTicket = Ticket.objects.get(id=ticket.id)
-        #         assignees = [val.lower() for val in assignees]
-        #         userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
-        #         assigneeTicket.assigned_to.add(*list(userId))
-
-        # saveNotification(1, ticket.id, request.user.id)
+        saveNotification(1, ticket.id, request.user.id)
         
         return JsonResponse({
             "msg": "success",
