@@ -105,7 +105,7 @@ Follow these steps to set up the project:
 10. Access the application at http://localhost:8000.
 
 11. User Password
-    username: Ferry
+    username: ferry
     password: password
    
    
