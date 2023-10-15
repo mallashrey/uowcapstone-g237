@@ -41,19 +41,28 @@ Follow these steps to set up the project:
     source myvenv/bin/activate
     ```
 
-6. For installing dependencies:
+6. Copy these commands below to install dependencies.
 
     ### For windows
     ```bash
-    pip install -r requirements.txt
+    pip install daphne, django-extensions, channels, tqdm, pandas, tensorflow, transformers
     ```
 
     ### For Mac
     ```bash
-    pip3 install -r requirements.txt
-    ```       
-   
-7. Run the Django development server:
+    pip3 install daphne, django-extensions, channels, tqdm, pandas, tensorflow, transformers
+    ```
+
+7. Download the ML model for running the questionnaire to determine personality traits
+
+    ```bash
+    https://drive.google.com/file/d/1ItgQD1pxvlq2U3rZtsBglQq8C7DTDmYw/view?usp=drive_link
+    ```
+
+    ### Once you've downloaded it copy the file and paste at capstone/ml_model/
+    
+
+8. Run the Django development server:
 
    ### For windows
     ```bash
@@ -65,35 +74,6 @@ Follow these steps to set up the project:
     python3 manage.py runserver
     ```    
 
-8. For missing dependencies while trying to run the program. Copy these commands below to install dependencies.
-
-    ### For windows
-    ```bash
-    pip install daphne
-    pip install django-extensions
-    pip install channels
-    pip install tqdm
-    pip install pandas
-    pip install tensorflow
-    pip install transformers
-    ```
-
-    ### For Mac
-    ```bash
-    pip3 install daphne
-    pip3 install django-extensions
-    pip3 install channels
-    pip3 install tqdm
-    pip3 install pandas
-    pip3 install tensorflow
-    pip3 install transformers
-    ```   
-
-9. Try to rerun the program.
-
-    ```bash
-    python3 manage.py runserver
-    ```
 
     ### If program can be run on your machine, it will show the command like below:
     ```bash
@@ -102,11 +82,38 @@ Follow these steps to set up the project:
     Quit the server with CONTROL-C.
     ```
 
-10. Access the application at http://localhost:8000.
 
-11. User Password
+9. Access the application at http://localhost:8000.
+
+10. User Password
+
+    ### Manager account
     username: ferry
     password: password
+    or
+    username: anne
+    password: password
+    or
+    username: shrey
+    password: password
+    or
+    username: musong
+    password: password
+    or
+    username: anne
+    password: password
+
+    ### User account
+    username: user
+    password: password
+    or
+    username: user2
+    password: password
+    or
+    username: user3
+    password: password
+
+
    
    
    

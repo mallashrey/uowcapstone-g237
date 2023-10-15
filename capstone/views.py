@@ -375,8 +375,9 @@ def users(request):
 @login_required
 def questionnaire(request, username):
     return render(request, "capstone/mbti/questionnaire.html", {
+        "iconTitle": ICONS[4],
         "titleHeader": "Questionnaire" ,
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "This page is used to know your personality according to MBTI test."
     })
 
 @login_required
