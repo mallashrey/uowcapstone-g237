@@ -23,15 +23,17 @@ Follow these steps to set up the project:
    ```bash
    cd uowcapstone-g237
    
-5. Set up a virtual environment and install dependencies using pipenv:
+4. Set up a virtual environment and install dependencies using pipenv:
    
-   ### For windows
-   ```bash
-   pip install virtualenv
+    ### For windows
+    ```bash
+    pip install virtualenv
+    ```
 
-   ### For Mac
-   ```bash
-   pip3 install virtualenv
+    ### For Mac
+    ```bash
+    pip3 install virtualenv
+    ```
    
    
 7. Activate the virtual environment:
