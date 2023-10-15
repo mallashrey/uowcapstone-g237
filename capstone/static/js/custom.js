@@ -68,3 +68,16 @@ $(function(){
     toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
 });
+
+function dateFormat(dateVal, type='short') {
+    date = new Date(dateVal);
+    if (type == 'short') {
+        options = { year: 'numeric', month: 'long', day: 'numeric' };
+    } else {
+        options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric',
+                    minute: 'numeric', hour12: true };
+    }
+    newDate = date.toLocaleDateString('en-US', options);
+    newDate = newDate.replace(" at", "");
+    return newDate;
+}

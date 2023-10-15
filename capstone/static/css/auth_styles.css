@@ -19,40 +19,6 @@ body {
     margin: 0px;
 }
 
-section {
-    
-    /* background: linear-gradient(to bottom, #f1f4f9, #dff1ff); */
-    /* background-image: url("https://wallpaperaccess.com/full/6605845.jpg"); */
-}
-
-/* section .color {
-  position: absolute;
-  filter: blur(150px);
-}
-
-section .color:nth-child(1) {
-  width: 600px;
-  height: 600px;
-  background: #ff359b;
-  top: -350px;
-}
-
-section .color:nth-child(2) {
-  left: 100px;
-  bottom: -150px;
-  height: 500px;
-  width: 500px;
-  background: #fffd87;
-}
-
-section .color:nth-child(3) {
-  right: 100px;
-  bottom: 50px;
-  height: 300px;
-  width: 300px;
-  background: #00d2ff;
-} */
-
 .box {
     position: relative;
 }

@@ -51,7 +51,7 @@ def index(request):
         overdue = getTickets("overdue", False, userId)
 
     outstanding = len(tickets)
-    mbtiRes = MBTIResult.objects.filter(user=request.user.id)
+    mbtiRes = MBTIResult.objects.filter(user=request.user.id).order_by('-create_date')[:3]
 
     notifications = Notification.objects.filter(send_to=userId)
     return render(request, "capstone/dashboard/index.html", {
@@ -68,9 +68,6 @@ def index(request):
         "titleHeader": "Dashboard",
         "subTitleHeader": "This is an example dashboard created using build-in elements and components."
     })
-
-def testChannel(request):
-    return render(request, "capstone/testchannel.html")
 
 @login_required
 def category(request):
@@ -156,18 +153,6 @@ def deleteCategory(request, id):
 @login_required
 def saveNotification(notif, ticketId, requester):
 
-    # if notif == 1:
-    #     objs = [
-    #         Notification(
-    #             notification = notif,
-    #             ticket_id = ticketId,
-    #             user_id = u.id
-    #         )
-    #         for u in User.objects.filter(is_manager=True)
-    #     ]
-
-    #     notif = Notification.objects.bulk_create(objs)
-
     if notif == 1:
         users = User.objects.filter(is_manager=True)
         for u in users:
@@ -184,75 +169,6 @@ def saveNotification(notif, ticketId, requester):
 
 @login_required
 def createTicket(request):
-    if request.method == "POST":
-
-        requester = request.user.id
-
-        if request.user.is_manager:
-            # array_values = request.POST.getlist('watchers[]')
-            # print(array_values)
-            categoryRole = request.POST["category_role"].strip()
-            selected_requirements = request.POST["requirement"].strip().split(", ")
-            # role = getRole(categoryRole)
-            role = "a"
-
-            # Calculate the weightage of each skill dynamically
-            all_selected_skills = []
-            for req in selected_requirements:
-                all_selected_skills.extend(role.get(req, []))
-
-            total_skills = len(all_selected_skills)
-            skill_count = {}
-            for skill in all_selected_skills:
-                skill_count[skill] = skill_count.get(skill, 0) + 1
-
-            skill_weightages = {skill: (count / total_skills) * 100 for skill, count in skill_count.items()}
-
-            # Score calculation for each candidate
-            candidates_score = {}
-
-            # Get MBTI values
-            userMBTIVal = MBTIResult.objects.raw('SELECT m.id, m.mbti_type, m.user_id, u.username FROM capstone_mbtiresult m JOIN capstone_user u on m.user_id = u.id WHERE (m.value, m.user_id) IN (SELECT MAX(value) AS max_value, user_id FROM capstone_mbtiresult GROUP BY user_id)')
-
-            for userVal in userMBTIVal:
-                candidates_score[userVal.username] = calculate_candidate_score(userVal.mbti_type, skill_weightages, SKILL_TO_MBTI)
-
-            sorted_candidates = sorted(candidates_score.items(), key=lambda x: x[1], reverse=True)
-
-            # Output sorted candidates and their scores
-            for candidate, score in sorted_candidates:
-                print(f"{candidate}: {score:.2f}")
-
-
-        ticket = Ticket(
-            ticket_title = request.POST["ticket_title"].strip(),
-            description = request.POST["ticket_description"].strip(),
-            category_id = request.POST["category"].strip(),
-            priority = request.POST["priority"].strip(),
-            requester_id = requester,
-            due_date = request.POST["due-date"].strip()
-        )
-        ticket.save()
-
-        saveNotification(1, ticket.id, requester)
-
-        # =============  Django Channel notification does not work with create_bulk =============
-        # task_title = request.POST["task_title"]
-        # task_desc = request.POST["description"]
-        # task_cat = request.POST["category"]
-        # task_priority = request.POST["priority"]
-        # task_soft_skill = "".join(request.POST.getlist("soft_skill"))
-        # user = request.POST["user"]
-
-        # print(f"title: {task_title}, desc: {task_desc}, cat: {task_cat}")
-        # task = Task(
-        #     = request.POST[""]
-        # )
-        # ============= End of Django Channel notification does not work with create_bulk =============
-        
-        
-        return HttpResponseRedirect(reverse("create_ticket"))
-    else:
         priority = PRIORITY
         softSkills = SOFTSKILLS
         categories = Category.objects.all()
@@ -302,7 +218,6 @@ def ticketDetail(request, ticket_id, ticket_name):
 def saveTicket(request):
     data = json.loads(request.body)
     ticketId = data["id"]
-    
     if ticketId == 0:
         ticket = Ticket(
             ticket_title = data["title"],
@@ -313,20 +228,25 @@ def saveTicket(request):
             due_date = data["dueDate"]
         )
 
-        ticket.save()
+        watchers = data["watchers"]
+        print(type(watchers))
 
-        if "watchers" in data and "assignees" in data:
-            watchers = data["watchers"]
-            assignees = data["assignees"]
-            if watchers:
-                watcherTicket = Ticket.objects.get(id=ticket.id)
-                watcherTicket.watcher.add(*watchers)
+        # ticket.save()
 
-            if assignees:
-                assigneeTicket = Ticket.objects.get(id=ticket.id)
-                assignees = [val.lower() for val in assignees]
-                userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
-                assigneeTicket.assigned_to.add(*list(userId))
+        # if "watchers" in data and "assignees" in data:
+        #     watchers = data["watchers"]
+        #     assignees = data["assignees"]
+        #     if watchers:
+        #         watcherTicket = Ticket.objects.get(id=ticket.id)
+        #         watcherTicket.watcher.add(*watchers)
+
+        #     if assignees:
+        #         assigneeTicket = Ticket.objects.get(id=ticket.id)
+        #         assignees = [val.lower() for val in assignees]
+        #         userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
+        #         assigneeTicket.assigned_to.add(*list(userId))
+
+        # saveNotification(1, ticket.id, request.user.id)
         
         return JsonResponse({
             "msg": "success",
@@ -347,11 +267,10 @@ def saveTicket(request):
             updateTicket.due_date = data["dueDate"]
             updateTicket.save()
 
-            # if "watchers" in data and "assignees" in data:
-            #     watchers = data["watchers"]
-            #     assignees = data["assignees"]
-            #     if watchers:
-            #         updateTicket.watcher.set(*watchers)
+            if "watchers" in data and "assignees" in data:
+                updateTicket.watcher.set(data["watchers"])
+                assignees = [User.objects.get(username__icontains=user) for user in data['assignees']]
+                updateTicket.assigned_to.set(assignees)
 
             return JsonResponse({
                 "msg": "update success",
@@ -372,8 +291,8 @@ def mbtiResult(request, username):
         user = ""
 
     if user:
-        roles = Role.objects.filter(user=user).order_by('-is_best')
-        mbtiRes = MBTIResult.objects.filter(user=request.user.id)
+        roles = Role.objects.filter(user=user).order_by('-create_date')[:3]
+        mbtiRes = MBTIResult.objects.filter(user=request.user.id).order_by('-create_date')[:3]
 
         return render(request, "capstone/mbti/mbti_result.html", {
             "personalities": mbtiRes,
@@ -473,6 +392,17 @@ def profile(request):
     })
 
 @login_required
+def notification(request):
+    userId = request.user.id
+    notifications = Notification.objects.filter(send_to=userId).order_by('-create_date')
+    return render(request, "capstone/notification/index.html", {
+        "notifications": notifications,
+        "titleHeader": "Notifications" ,
+        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+    })
+
+
+@login_required
 def saveQuestionnaire(request):
     q1 = request.POST["q1"]
     q2 = request.POST["q2"]
@@ -481,19 +411,26 @@ def saveQuestionnaire(request):
     ess1 = request.POST["ess1"]
     ess2 = request.POST["ess2"]
 
-    # questionnaire = Questionnaire(
-    #     opt_ans1 = q1,
-    #     opt_ans2 = q2,
-    #     opt_ans3 = q3,
-    #     opt_ans4 = q4,
-    #     txt_ans1 = ess1,
-    #     txt_ans2 = ess2,
-    #     user_id = request.user.id
-    # )
-    # questionnaire.save()
+    
+    newQ1 = MBTI_QUESTIONNAIRE_VALUE[1][0] if q1 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[1][1]
+    newQ2 = MBTI_QUESTIONNAIRE_VALUE[2][0] if q2 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[2][1]
+    newQ3 = MBTI_QUESTIONNAIRE_VALUE[3][0] if q3 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[3][1]
+    newQ4 = MBTI_QUESTIONNAIRE_VALUE[4][0] if q4 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[4][1]
 
-    sentences = ess1 + " " + ess2
-    execMBTIModel(sentences)
+    sentences = ess1 + " " + ess2 + " " + newQ1 + " " + newQ2 + " " + newQ3 + " " + newQ4
+    mbtiTraitValues = execMBTIModel(sentences)
+
+    userScore = sortUserScore(mbtiTraitValues)
+
+    # Save MBTI Score to DB
+    for mbtiVal in mbtiTraitValues:
+        mbti = MBTIResult(mbti_type=mbtiVal[0], value=round(mbtiVal[1] * 100, 2), user_id = request.user.id)
+        mbti.save()
+
+    # Save suitable role to DB
+    for val in userScore:
+        role = Role(user_id=request.user.id, role_type_id=val['id'], is_best=val['is_best'])
+        role.save()
 
     messages.success(request, "You have submitted the questionnaire", extra_tags="MBTI Questionnaire")
     return HttpResponseRedirect(reverse('mbti_result', args=[request.user.username]))
@@ -528,22 +465,46 @@ def execMBTIModel(sentences):
     sorted_data = sorted(data.items(), key=lambda x: x[1], reverse=True)
 
     top_3_values = sorted_data[:3]
-    print(top_3_values)
+    
     return top_3_values
 
 
-@login_required
-def notification(request):
-    userId = request.user.id
-    notifications = Notification.objects.filter(send_to=userId).order_by('-create_date')
-    return render(request, "capstone/notification/index.html", {
-        "notifications": notifications,
-        "titleHeader": "Notifications" ,
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
-    })
+def sortUserScore(mbtiTraitValues):
+    mbti_results = {key: round(value* 100, 2) for key, value in mbtiTraitValues}
+    scores = {}
+    for role, preferences in ROLE_PREFERENCES.items():
+        scores[role] = calculateScore(preferences, mbti_results)
 
-# Depending on the role, fetch the role's ticket requirements dictionary
-# def getRole(role):
+    # Sort the roles based on scores
+    sortedRoles = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    
+    userRole = []
+    categoryRoles = CategoryRole.objects.all()
+
+    for cRole in categoryRoles:
+        for val in sortedRoles:
+            if val[0].lower() in cRole.role_name.lower():
+                role = {'id': cRole.id, 'score': val[1]}
+                userRole.append(role)
+
+    sortedUserRole = sorted(userRole, key=lambda x: x['score'], reverse=True)
+
+    for index, val in enumerate(sortedUserRole):
+        if index == 0:
+            val['is_best'] = 1
+        else:
+            val['is_best'] = 0
+    
+    return sortedUserRole[:3]
+
+
+def calculateScore(role_preferences, mbti_results):
+    score = 0
+    for mbti_type, percentage in mbti_results.items():
+        for trait in mbti_type:
+            score += role_preferences.get(trait, 0) * percentage
+    return score
+
 
 def getTaskReq(roleId):
     roleId = int(roleId)
@@ -682,31 +643,6 @@ def logoutView(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
-    # val = ess1 + " " + ess2
-    # predicted_class, predicted_score = mbtiModel(val)
-
-    # return render(request, "capstone/mbti_result.html", {
-    #     "predicted_class": PERSONAlITY_TYPES.get(predicted_class),
-    #     "predicted_score": round(predicted_score *100 ,2)
-    # })
-
-    # def mbtiResult1(request):
-
-    #     mbti_values = mbtiVal1("qqq")
-    #     dict_mbti = []
-        
-    #     for val in mbti_values:
-    #         dict_mbti.append({
-    #             "class": val[0],
-    #             "score": math.ceil(val[1] * 100) / 100
-    #         })
-
-
-    #     return render(request, "capstone/mbti_result.html", {
-    #         "values": dict_mbti
-    #     })
-
-
 
 # def mbti(request, username):
 #     try:
@@ -733,45 +669,9 @@ def logoutView(request):
 #         })
 #     else:
 #         return render(request, "capstone/questionnaire.html")
-    
 
-# def editTask(request, id):
-#     try:
-#         task = Ticket.objects.get(pk=id)
-#     except Ticket.DoesNotExist:
-#         task = ""
-
-#     if request.method == "POST":
-#         if task:
-#             task.task_title = request.POST["task_title"].lstrip()
-#             task.save()
-
-#             messages.info(request, "Task has been updated successfully")
-#             return HttpResponseRedirect(reverse("task"))
-#     else:
-#         categories = Category.objects.all()
-#         users = User.objects.all()
-#         return render(request, "capstone/ticket/edit.html", {
-#             "categories": categories,
-#             "users": users,
-#             "task": task
-#         })
-
-# def deleteTask(request, id):
-#     if request.method != "POST":
-#         return JsonResponse({"error": "POST method request is required"})
-    
-#     try:
-#         task = Ticket.objects.get(pk=id)
-#     except Ticket.DoesNotExist:
-#         task = ""
-    
-#     if task:
-#         task.delete()
-#         return JsonResponse({
-#             "message": "Data has been deleted successfully"
-#         }, status=200)
-#     else:
-#         return JsonResponse({
-#             "message": "There is a mistaken when deleting data"
-#         }, status=400)
+# data_list = [
+#     {'mbti_type': 'test', 'value': 50, 'user_id': 2},
+#     {'mbti_type': 'test2', 'value': 23, 'user_id': 2},
+#     {'mbti_type': 'test3', 'value': 10, 'user_id': 2}
+# ]

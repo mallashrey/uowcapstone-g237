@@ -59,7 +59,7 @@
             </div>
             
         </div>
-        <div style="color: #fff; text-align: right; padding: 0 10px 10px;">as of 03/03/2023</div>
+        <div style="color: #fff; text-align: right; padding: 0 10px 10px;">as of {{personalities.first.create_date|date:"d-m-Y"}}</div>
 
     </div>
 
@@ -70,7 +70,6 @@
                     Personality Description
                 </div>
                 <div class="app-card__body" style="color: #fff;">
-                    <div class="mb10">Based on your MBTI results, we found that Software Designer is the best fit for you, and following are Software Tester and Software Maintainer!</div>
                     <div>
                         <ul>
                             {% for mbti in personalities %}

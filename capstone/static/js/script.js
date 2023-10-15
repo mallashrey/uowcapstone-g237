@@ -170,7 +170,7 @@ function getNotification(userId) {
                     imgRequester = `/static/images/user-icon.png`
                 }
 
-                divElement.innerHTML += `<a href="/ticket_detail/${notif.slug}" class="notif-row dflex gap20">
+                divElement.innerHTML += `<a href="/ticket_detail/${notif.ticket.id}/${notif.slug}" class="notif-row dflex gap20">
                                             <div> <img width="42" class="rounded-circle" src="${imgRequester}" alt=""> </div>
                                             <div class="dflex" style="flex-direction: column;">
                                                 <div class="mb5">
@@ -178,7 +178,7 @@ function getNotification(userId) {
                                                 </div>
                                                 <div class="dflex gap10">
                                                     <span><i class="fa-solid fa-clock"></i></span>
-                                                    <span>time</span>
+                                                    <span>${dateFormat(notif.create_date, 'long')}</span>
                                                 </div>
                                             </div>
                                         </a>`
@@ -387,61 +387,45 @@ function capitalizeText(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-function getSelectedCell() {
-    const table = document.getElementById('myTable');
-    const rows = table.getElementsByTagName('tr');
-
-    // Add click event listeners to table rows
-    for (let i = 0; i < rows.length; i++) {
-        rows[i].addEventListener('click', function() {
-            // Handle row selection event here
-            // You can access the row's data, e.g., cells[i].textContent
-            console.log(`Row ${i + 1} selected: ${this.cells[0].textContent}, ${this.cells[1].textContent}`);
-        });
-    }
-}
-
-// function selectRole() {
-//     fetch(`/get_role`)
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data)
-//         })
-// }
-
-
-
-function selectRequirement() {
-    alert("bbb")
-}
-
-function showHideNotification() {
-
-    const notifBtn = document.querySelector('.notification');
-
-    notifBtn.addEventListener("click", () => {
-        let notifActive = document.querySelector(".notif-container");
-        if (notifActive.classList.contains('active')) {
-            showHideNotif(true)
-        } else {
-            showHideNotif(false)
-        }
-    })
-
-    window.addEventListener("click", function (e) {
-        if (e.target.closest(".notification") === null) {
-            showHideNotif(true)
-        }
-    });
-}
-
-function showHideNotif(show) {
-    const notifContainer = document.querySelector('.notif-container');
-
-    if (show) {
-        notifContainer.classList.remove('active')
+document.querySelector('.notification').addEventListener("click", (e) => {
+    
+    let notifActive = document.querySelector(".notif-container");
+    if (notifActive.classList.contains('active')) {
+        showHideDropdown(notifActive, true)
     } else {
-        notifContainer.classList.add('active')
+        showHideDropdown(notifActive, false)
+    }
+    
+})
+
+document.querySelector('.widget-account').addEventListener("click", (e) => {
+    
+    let widgetActive = document.querySelector(".widget-account-header");
+    if (widgetActive.classList.contains('active')) {
+        showHideDropdown(widgetActive, true)
+    } else {
+        showHideDropdown(widgetActive, false)
+    }
+    
+})
+
+window.addEventListener("click", function (e) {
+    let widgetActive = document.querySelector(".widget-account-header");
+    if (e.target.closest(".widget-account") === null) {
+        showHideDropdown(widgetActive, true)
+    }
+
+    let notifActive = document.querySelector(".notif-container");
+    if (e.target.closest(".notification") === null) {
+        showHideDropdown(notifActive, true)
+    }
+});
+
+function showHideDropdown(elClass, show) {
+    if (show) {
+        elClass.classList.remove('active')
+    } else {
+        elClass.classList.add('active')
     }
 }
 

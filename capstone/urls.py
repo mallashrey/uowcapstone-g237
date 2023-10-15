@@ -19,9 +19,6 @@ urlpatterns = [
     path("profile", views.profile, name="profile"),
     path("user", views.users, name="user"),
     path("save_questionnaire", views.saveQuestionnaire, name="save_questionnaire"),
-
-    path("testchannel", views.testChannel, name="test_channel"),
-    
     path("questionnaire/<username>", views.questionnaire, name="questionnaire"),
     path("mbti_result/<username>", views.mbtiResult, name="mbti_result"),    
     

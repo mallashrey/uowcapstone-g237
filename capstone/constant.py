@@ -40,6 +40,21 @@ PERSONAlITY_TYPES = {
     15: "ESFJ"
 }
 
+MBTI_QUESTIONNAIRE_VALUE = {
+    1: ["For my free time, I ideally prefer to attend social activities and events where i can be surrounded by people, meet and talk to new people.", "For my free time, I like to be alone and enjoy some quiet time by myself."],
+    2: ["I like hobbies that are technical and hands on.", "I am interested in hobbies that allow me to use my intuition to explore abstract concepts and use my imagination to dream big."],
+    3: ["My favorite hobbies are those that allow me to learn new things.", "I tend to prioritize personal values and harmony over cold logic."],
+    4: ["It's more exciting for me to jump into something without a clear plan than to follow a set path.", "I like for my holidays to have everything being organized and booked in advance so that i can enjoy everything without worrying."]
+}
+
+ROLE_PREFERENCES = {
+    "Software Analyst": {"T": 21, "P": 21, "F": 10.5, "S": 15.8, "E": 10.5, "J": 10.5, "I": 10.5},
+    "Software Designer": {"T": 21, "F": 36.8, "E": 10.5, "J": 10.5, "N": 10.5, "S": 10.5},
+    "Programmer": {"T": 50, "E": 25, "F": 25},
+    "Software Tester": {"T": 26.3, "E": 15.8, "J": 15.8, "F": 31.6, "S": 10.5},
+    "Software Maintainer": {"T": 40, "F": 40, "P": 20},
+}
+
 SKILL_TO_MBTI = {
     "Effective Communicative": "E",
     "Interpersonal Aptitude": "F",

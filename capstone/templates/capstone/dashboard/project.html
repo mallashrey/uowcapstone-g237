@@ -60,10 +60,6 @@
                             <span class="badge rounded-pill {{ ticket.status|getCSSStatus }}">{{ ticket.status|getStatus }}</span>
                         </td>
                         <td>
-                            <!-- <span class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-determinate css-17451yp progress-bar1" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
-                                <span class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Determinate css-i6wji9" style="transform: translateX(0%);">
-                                </span>
-                            </span> -->
                             <div style="display: flex; flex-direction: column; gap: 5px;">
                                 <div class="txt-progress">{{ ticket.status|showProgress }}%</div>
                                 <div class="css-17451yp MuiLinearProgress-bar skill-bar ">

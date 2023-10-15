@@ -8,7 +8,8 @@
         </div>
         <div class="app-card__body">
             {% for notif in notifications %}
-            <div class="dflex gap20">
+            <a class="notif-row" href="{% url 'ticket_detail' notif.ticket.id notif.notif_ticket_title_slug %}" style="padding-left: 0px; padding-right: 0px;">
+            <div class="dflex gap20" style="padding-bottom: 20px;">
                 <div>
                     {% if notif.creator.img_profile %}
                     <img width="42" class="rounded-circle" src="/static/{{notif.creator.img_profile}}" alt="">
@@ -16,20 +17,22 @@
                     <img width="42" class="rounded-circle" src="/static/images/user-icon.png" alt="">
                     {% endif %}
                 </div>
-                <div class="dflex" style="flex-direction: column;">
-                    <div class="mb10">
-                        {% if is_read == false %}
-                        New message!
-                        {% endif %}
-                        New task has been created. 
-                        <a href="{% url 'ticket_detail' notif.notif_ticket_title_slug %}">{{ notif.ticket.ticket_title }}</a>
-                    </div>
-                    <div class="dflex gap10">
-                        <span><i class="fa-solid fa-clock"></i></span>
-                        <span>time</span>
+                
+                    <div class="dflex" style="flex-direction: column; color: #fff">
+                        <div class="mb10">
+                            {% if is_read == false %}
+                            <span style="color: #f9fd44;">New message!</span>
+                            {% endif %}
+                            <span>New task has been created.</span>
+                            <span>{{ notif.ticket.ticket_title }}</span>
+                        </div>
+                        <div class="dflex gap10">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <span>{{notif.create_date|date:"Y-m-d h:m:s"}}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
     </div>
