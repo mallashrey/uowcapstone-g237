@@ -1,5 +1,5 @@
 {% extends 'capstone/layout.html' %}
-
+{% load custom_filter %}
 {% block body %}
 <div class="container-card dash-card mt20 mb50">
     <div style="padding: 20px;">
@@ -54,38 +54,73 @@
             </div>
         </div>
 
-        
-        <div class="col-md-3 dflex gap20">
-            <div class="dflex gap15 mb20">
-                <div class="css-vz2i8e">
-                    <div class="css-63xtou">
-                        <label class="css-1bw07gz" style="color: #b0b0b0;">Priority</label>
-                    </div>
-                    <div class="form-control-wrapper">
-                        <select id="ticket_priority" class="form-caps form-select" name="priority" style="background: transparent;
-                        outline: none; width: 100%;
-                        border: none; z-index: 1;
-                        padding: 12px 15px; cursor: pointer; font-size: .88rem;" required>
-                            <option selected>Select Priority</option>
-                            {% for pr in priority %}
-                                <option value="{{ pr.0 }}" {% if ticketDetail.priority == pr.0 %} selected {% endif %}> {{ pr.1 }}</option>
-                            {% endfor %}
-                        </select>
-                        <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
-                            <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
-                    <div class="invalid-feedback">
-                        Priority cannot be empty
+        <div class="dflex">
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Priority</label>
+                        </div>
+                        <div class="form-control-wrapper">
+                            <select id="ticket_priority" class="form-caps form-select" name="priority" style="background: transparent;
+                            outline: none; width: 100%;
+                            border: none; z-index: 1;
+                            padding: 12px 15px; cursor: pointer; font-size: .88rem;" required>
+                                <option selected>Select Priority</option>
+                                {% for pr in priority %}
+                                    <option value="{{ pr.0 }}" {% if ticketDetail.priority == pr.0 %} selected {% endif %}> {{ pr.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
+                                <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div class="invalid-feedback">
+                            Priority cannot be empty
+                        </div>
                     </div>
                 </div>
             </div>
+            {% if request.user.dept == 1 or request.user.is_manager %}
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Ticket Status</label>
+                        </div>
+                        <div class="form-control-wrapper">
+                            <select id="ticket_status" class="form-caps form-select custom-form-select" name="status">
+                                {% for status in progressStatus %}
+                                    <option value="{{ status.0 }}" {% if ticketDetail.status == status.0 %} selected {% endif %}> {{ status.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
+                                <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Ticket Status</label>
+                        </div>
+                        <div class="form-control-wrapper">
+                            <input type="text" class="form-caps form-select custom-form-select" value="{{ ticketDetail.status|getStatus|title }}" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
         
-
-        {% if request.user.is_manager %}
         <div class="dflex gap20 alg-bal">
             <div class="col-md-3 dflex gap20">
                 <div class="dflex gap15 mb20" style="width: 100%;">
@@ -94,25 +129,20 @@
                             <label class="css-1bw07gz" style="color: #b0b0b0;">Requester</label>
                         </div>
                         <div class="form-control-wrapper">
-                            <input type="text" class="form-caps form-select" value="{{ ticketDetail.requester.username|title }}" style="background: transparent;
-                            outline: none; width: 100%;
-                            border: none; z-index: 1;
-                            padding: 12px 15px; font-size: .88rem;">
+                            <input type="text" class="form-caps form-select custom-form-select" value="{{ ticketDetail.requester.username|title }}" disabled>
                         </div>
                     </div>
                 </div>
             </div>
+            {% if request.user.is_manager and ticketDetail.status != 3 %}
             <div class="col-md-3 dflex gap20">
-                <div class="dflex gap15 mb20">
+                <div class="dflex gap15 mb20" style="width: 100%;">
                     <div class="css-vz2i8e">
                         <div class="css-63xtou dflex alg-bal jst-spc-btw">
                             <label class="css-1bw07gz" style="color: #b0b0b0;">Watcher</label>
                         </div>
                         <div class="form-control-wrapper">
-                            <select id="watcher123" class="form-caps form-select js-example-basic-multiple" multiple="multiple" name="watchers[]" style="background: transparent;
-                            outline: none; width: 100%;
-                            border: none; z-index: 1;
-                            padding: 12px 15px; cursor: pointer; font-size: .88rem;" data-placeholder="Select Watcher">
+                            <select id="watcher123" class="form-caps form-select js-example-basic-multiple custom-form-select" multiple="multiple" name="watchers[]" data-placeholder="Select Watcher">
                                 <option></option>
                                 {% for watcher in watchers %}
                                 <option value="{{ watcher.id }}"> {{ watcher.username|title }}</option>
@@ -141,8 +171,51 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20" style="width: 100%;">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou dflex alg-bal jst-spc-btw">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Watcher</label>
+                        </div>
+                        {% if viewWatchers %}
+                        <div class="capsule-container">
+                            {% for watcher in viewWatchers %}
+                            <div class="capsule-overlay">
+                                <span class="capsule-text">{{ watcher.username|title }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <span>-</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20" style="width: 100%;">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou dflex alg-bal jst-spc-btw">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Assigned to</label>
+                        </div>
+                        
+                        {% if viewAssignees %}
+                        <div class="capsule-container">
+                            {% for assignee in viewAssignees %}
+                            <div class="capsule-overlay">
+                                <span class="capsule-text">{{ assignee.username|title }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <span>-</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
+        
         <div class="col-md-3 dflex gap15 mb20">
             <div class="css-vz2i8e">
                 <div class="css-63xtou">
@@ -158,10 +231,12 @@
                 </div>
             </div>
         </div>
+        {% if request.user.dept == 1 %} 
         <div class="gap20" style="display: flex; justify-content: center;">
             <button class="btn btn-cap-primary" id="btn-save-ticket">Save</button>
             <button class="btn btn-cap-outline-danger" href="javascript:void(0);" onclick="history.go(-1);">Cancel</button>
         </div>
+        {% endif %}
     </div>
 </div>
 

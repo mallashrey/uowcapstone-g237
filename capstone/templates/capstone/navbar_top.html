@@ -2,18 +2,12 @@
     <div class="main-navbar">
         <div class="navbar-top-overlay">
             <div class="navbar-container">
-                <div class="fixed-sidebar closed-sidebar-mobile closed-sidebar" style="width: 100%;">
+                <div class="fixed-sidebar closed-sidebar-mobile closed-sidebar">
                     <div class="app-header header-shadow">
                         <div class="app-header__logo">
-                            <a href="{% url 'index' %}" class="dflex alg-cen gap20" style="width: 100%;">
+                            <a href="{% url 'index' %}" class="logo-container">
                                 <div class="logo-src"></div>
-                                <div style="text-transform: uppercase;
-                                font-size: .8rem;
-                                margin: 0.75rem 0;
-                                font-weight: bold;
-                                color: #bccfff;
-                                white-space: nowrap;
-                                position: relative; letter-spacing: 1px;">JFAMS Alloc</div>
+                                <div class="logo-title">JFAMS Alloc</div>
                             </a>
                         </div>
                         <div class="app-header__content">
@@ -23,7 +17,7 @@
                                         <input type="text" class="search-input" placeholder="Type to search">
                                         <button class="search-icon"><span></span></button>
                                     </div>
-                                    <button class="close"></button>
+                                    <button class="btn-search-close"></button>
                                 </div>
                             </div>
                             <div class="app-header-right dflex">
@@ -65,8 +59,7 @@
                                                 <div class="widget-account-header">
                                                     <div class="dropdown-menu-header">
                                                         <div class="dropdown-menu-header-inner bg-info">
-                                                            <div class="menu-header-image opacity-2"
-                                                                style="background-image: url('/static/images/city3.jpg');">
+                                                            <div class="menu-header-image opacity-2">
                                                             </div>
                                                             <div class="menu-header-content">
                                                                 <div class="widget-content p-0">
@@ -84,7 +77,7 @@
                                                                     </div>
                                                                     <div class="user-sm-box">
                                                                     {{ request.user.first_name }} {{ request.user.last_name }}
-                                                                </div>
+                                                                    </div>
                                                                 </div>
                                                                 
                                                             </div>

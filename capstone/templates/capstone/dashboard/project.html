@@ -20,18 +20,15 @@
                 <tbody>
                     {% for ticket in tickets %}
                     <tr>
-                        <td style="font-size: 0.875rem; font-weight: 600;">
-                            <a href="{% url 'ticket_detail' ticket.id ticket.ticket_title_slug %}" style="display: -webkit-box;
-                            overflow: hidden;
-                            -webkit-line-clamp: 2;
-                            -webkit-box-orient: vertical;
-                            white-space: pre-wrap;" data-toggle="tooltip" data-title="{{ticket.ticket_title}}">{{ ticket.ticket_title }}</a>
+                        <td>
+                            <a class="ticket-title" href="{% url 'ticket_detail' ticket.id ticket.ticket_title_slug %}" data-toggle="tooltip" title="{{ticket.description}}">{{ ticket.ticket_title }}</a>
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
+                        <td>
                             <i class="cc-priority {{ticket.priority|getPriority}}"></i>
                             <span>{{ ticket.priority|removeHypens }}</span>
+                        </div>
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
+                        <td>
                             {% if ticket.due_date %}
                                 {{ ticket.due_date|date:"Y-m-d" }}
                             {% else %}
@@ -39,31 +36,31 @@
                             {% endif %}
                         </td>
                         <td>
-                            <div class="css-xgstl5">
+                            <div class="user-img-container">
                                 {% if ticket.assigned_to.all %}
                                     {% for user in ticket.assigned_to.all %}
-                                    <div class="css-1wdn32l" data-toggle="tooltip" data-title="{{user.username}}">
+                                    <div class="user-tooltip" data-toggle="tooltip" title="{{user.username}}">
                                         {% if user.img_profile %}
-                                        <img  class="rounded-circle css-u226zh" src="/static/{{user.img_profile}}" alt="">
+                                        <img class="rounded-circle user-img-sml" src="/static/{{user.img_profile}}" alt="">
                                         {% else %}
-                                        <img  class="rounded-circle css-u226zh" src="/static/images/user-icon.png" alt="">
+                                        <img class="rounded-circle user-img-sml" src="/static/images/user-icon.png" alt="">
                                         {% endif %}
                                     </div>
                                     {% endfor %}
 
                                 {% else %}
-                                <div style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600; color: #fff;">-</div>
+                                <div class="empty-list">-</div>
                                 {% endif %}
                             </div>
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
+                        <td>
                             <span class="badge rounded-pill {{ ticket.status|getCSSStatus }}">{{ ticket.status|getStatus }}</span>
                         </td>
                         <td>
-                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <div class="dflex flex-col gap5">
                                 <div class="txt-progress">{{ ticket.status|showProgress }}%</div>
-                                <div class="css-17451yp MuiLinearProgress-bar skill-bar ">
-                                    <div class="css-i6wji9" aria-valuenow="{{ ticket.status|showProgress }}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar-base">
+                                    <div class="vivid-progress" aria-valuenow="{{ ticket.status|showProgress }}" aria-valuemin="0" aria-valuemax="100">
                                         
                                     </div>
                                 </div>
@@ -83,9 +80,8 @@
 </div>
 
 <script>
-        // Progress bars
     $(document).ready(function() {
-        $('.css-i6wji9').css("width",
+        $('.vivid-progress').css("width",
             function() {
                 return $(this).attr("aria-valuenow") + "%";
             }

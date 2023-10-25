@@ -1,10 +1,12 @@
 {% extends 'capstone/layout.html' %}
 {% load custom_filter %}
 {% block body %}
-
+{% load tz %}
 {% if personalities %}
-<div class="mb50" style="display: flex; gap: 20px;">
-    <div class="container-card dash-card mbti-card-res" style="height: 630px;">
+
+
+<div class="container-card-overlay">
+    <div class="container-card dash-card mbti-card-res">
         <div style="padding: 20px;">
             <div class="app-card__body card-outline ">
                 <div class="card_header mb10">
@@ -16,34 +18,33 @@
                         <img src="/static/images/user-icon.png" alt="">
                         {% endif %}
                     </div>
-                    <div style="position: relative; font-size: 1.5rem; letter-spacing: 1px; color: #fff; font-weight: 600;">
+                    <div class="card-name-title">
                         {{ request.user.first_name }} {{ request.user.last_name }}
                     </div>
                 </div>
-                <div style="width: 100%; display: flex; flex-direction: column ;gap: 15px; align-items: center;">
-                    <div style="color: #fff; text-align: center; position: relative;">Your MBTI Result</div>
-                    <div>
-                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                            <svg class="radial-progress" data-percentage="{{ personalities.first.value }}" viewBox="0 0 80 80">
-                                <defs>
-                                    <linearGradient id="linear" x1="10%" y1="90%" x2="0%" y2="10%">
-                                        <stop offset="0%" stop-color="#3fffa2" />
-                                        <stop offset="50%" stop-color="#ffdb3a" />
-                                        <stop offset="100%" stop-color="#ff6363" />
-                                    </linearGradient>
-                                </defs>
-                                <circle class="incomplete" cx="40" cy="40" r="35"></circle>
-                                <circle class="complete" cx="40" cy="40" r="35"
-                                    style="stroke-dashoffset: 147.3406954533613;"></circle>
-                                <text class="percentage count" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">{{ personalities.first.value }}</text>
-                            </svg>
-                            <h3 class="card-text-body">{{ personalities.first.mbti_type }}</h3>
-                        </div>
+                <div class="mbti-res-container">
+                    <div class="sub-title-header">Your MBTI Result</div>
+                    
+                    <div class="dflex flex-col jst-cen alg-cen">
+                        <svg class="radial-progress" data-percentage="{{ personalities.first.value }}" viewBox="0 0 80 80">
+                            <defs>
+                                <linearGradient id="linear" x1="10%" y1="90%" x2="0%" y2="10%">
+                                    <stop offset="0%" stop-color="#3fffa2" />
+                                    <stop offset="50%" stop-color="#ffdb3a" />
+                                    <stop offset="100%" stop-color="#ff6363" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                            <circle class="complete" cx="40" cy="40" r="35"
+                                style="stroke-dashoffset: 147.3406954533613;"></circle>
+                            <text class="percentage count" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">{{ personalities.first.value }}</text>
+                        </svg>
+                        <h3 class="card-text-body">{{ personalities.first.mbti_type }}</h3>
                     </div>
-                    <div style="display: flex; justify-content: space-around; width: 100%;">
+                    <div class="sub-pie-container">
                         {% for res in personalities %}
                             {% if not forloop.first %}
-                            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <div class="sub-pie-overlay">
                                 <svg class="radial-progress low" data-percentage="{{ res.value }}" viewBox="0 0 80 80">
                                     <circle class="incomplete" cx="40" cy="40" r="35"></circle>
                                     <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 147.3406954533613;"></circle>
@@ -59,6 +60,7 @@
             </div>
             
         </div>
+
         <div style="color: #fff; text-align: right; padding: 0 10px 10px;">as of {{personalities.first.create_date|date:"d-m-Y"}}</div>
 
     </div>

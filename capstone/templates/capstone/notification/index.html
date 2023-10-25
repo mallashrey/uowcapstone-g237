@@ -8,7 +8,7 @@
         </div>
         <div class="app-card__body">
             {% for notif in notifications %}
-            <a class="notif-row" href="{% url 'ticket_detail' notif.ticket.id notif.notif_ticket_title_slug %}" style="padding-left: 0px; padding-right: 0px;">
+            <a class="notif-row" href="{% url 'read_ticket' notif.ticket.id %}">
             <div class="dflex gap20" style="padding-bottom: 20px;">
                 <div>
                     {% if notif.creator.img_profile %}
@@ -20,8 +20,8 @@
                 
                     <div class="dflex" style="flex-direction: column; color: #fff">
                         <div class="mb10">
-                            {% if is_read == false %}
-                            <span style="color: #f9fd44;">New message!</span>
+                            {% if not notif.is_read %}
+                            <span style="color: #f9fd44;">Unread!</span>
                             {% endif %}
                             <span>New task has been created.</span>
                             <span>{{ notif.ticket.ticket_title }}</span>

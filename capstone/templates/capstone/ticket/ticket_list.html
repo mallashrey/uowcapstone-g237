@@ -1,7 +1,9 @@
 {% extends 'capstone/layout.html' %}
 {% load custom_filter %}
 {% block body %}
-<div class="mb30" style="display: flex; width: calc(100% + 24px); gap: 20px;">
+
+{% if not request.GET.search_keyword %}
+<div class="ticket-header-row">
     <a href="{% url 'ticket_list' 'all' %}" class="task-card">
         <div class="card widget-content bg-plum-plate  b-rad10">
             <div class="widget-content-wrapper text-white" style="gap: 20px;">
@@ -10,9 +12,7 @@
                     <div class="widget-subheading">{{ allTicket }}</div>
                 </div>
                 <div class="icon-overlay-card">
-                    <svg viewBox="0 0 460 560" style="fill: #fff; width: 22px;">
-                        <path d="M64 64C28.7 64 0 92.7 0 128v64c0 8.8 7.4 15.7 15.7 18.6C34.5 217.1 48 235 48 256s-13.5 38.9-32.3 45.4C7.4 304.3 0 311.2 0 320v64c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V320c0-8.8-7.4-15.7-15.7-18.6C541.5 294.9 528 277 528 256s13.5-38.9 32.3-45.4c8.3-2.9 15.7-9.8 15.7-18.6V128c0-35.3-28.7-64-64-64H64zm64 112l0 160c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16V176c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16zM96 160c0-17.7 14.3-32 32-32H448c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H128c-17.7 0-32-14.3-32-32V160z"/>
-                    </svg>
+                    <i class="fa-solid fa-ticket" style="font-size: 18px;"></i>
                 </div>
             </div>
         </div>
@@ -25,9 +25,7 @@
                     <div class="widget-subheading">{{ outstanding }}</div>
                 </div>
                 <div class="icon-overlay-card">
-                    <svg viewBox="-60 0 540 550" style="fill: #fff; width: 22px;">
-                        <path d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64V75c0 42.4 16.9 83.1 46.9 113.1L146.7 256 78.9 323.9C48.9 353.9 32 394.6 32 437v11c-17.7 0-32 14.3-32 32s14.3 32 32 32H64 320h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V437c0-42.4-16.9-83.1-46.9-113.1L237.3 256l67.9-67.9c30-30 46.9-70.7 46.9-113.1V64c17.7 0 32-14.3 32-32s-14.3-32-32-32H320 64 32zM288 437v11H96V437c0-25.5 10.1-49.9 28.1-67.9L192 301.3l67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/>
-                    </svg>
+                    <i class="fa-solid fa-hourglass-start" style="font-size: 18px;"></i>
                 </div>
             </div>
         </div>
@@ -40,9 +38,7 @@
                     <div class="widget-subheading">{{ resolved }}</div>
                 </div>
                 <div class="icon-overlay-card">
-                    <svg viewBox="0 0 460 560" style="fill: #fff; width: 22px;">
-                        <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"/>
-                    </svg>
+                    <i class="fa-regular fa-circle-check"></i>
                 </div>
             </div>
         </div>
@@ -55,9 +51,7 @@
                     <div class="widget-subheading">{{ dueToday }}</div>
                 </div>
                 <div class="icon-overlay-card">
-                    <svg viewBox="0 0 460 560" style="fill: #fff; width: 22px;">
-                        <path d="M128 0c13.3 0 24 10.7 24 24V64H296V24c0-13.3 10.7-24 24-24s24 10.7 24 24V64h40c35.3 0 64 28.7 64 64v16 48V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V192 144 128C0 92.7 28.7 64 64 64h40V24c0-13.3 10.7-24 24-24zM400 192H48V448c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V192zM329 297L217 409c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47 95-95c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
-                    </svg>
+                    <i class="fa-regular fa-calendar-check"></i>
                 </div>
             </div>
         </div>
@@ -70,20 +64,20 @@
                     <div class="widget-subheading">{{ overdue }}</div>
                 </div>
                 <div class="icon-overlay-card">
-                    <svg viewBox="0 0 460 560" style="fill: #fff; width: 22px;">
-                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
-                    </svg>
+                    <i class="fa-solid fa-circle-exclamation"></i>
                 </div>
             </div>
         </div>
     </a>
 </div>
 
+{% endif %}
+
 <div class="container-card dash-card mt20 mb50">
     
     <div style="padding: 20px;">
         <div class="app-card__header_title" style="margin-bottom: 2.25rem;">
-            Projects
+            Tickets
         </div>
         <div class="app-card__body">
             <table class="table">
@@ -94,52 +88,67 @@
                         <th class="table-th-header" scope="col">Watcher</th>
                         <th class="table-th-header" scope="col">Due Date</th>
                         <th class="table-th-header" scope="col">Status</th>
+                        <th class="table-th-header" scope="col">Assignees</th>
                         <th class="table-th-header" scope="col">Requester</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for ticket in tickets %}
                     <tr>
-                        <td style="font-size: 0.875rem; font-weight: 600;">
-                            <a href="{% url 'ticket_detail' ticket.id ticket.ticket_title_slug %}" style="display: -webkit-box;
-                            overflow: hidden;
-                            -webkit-line-clamp: 2;
-                            -webkit-box-orient: vertical;
-                            white-space: pre-wrap;" data-toggle="tooltip" data-title="{{ticket.ticket_title}}">{{ ticket.ticket_title }}</a>
+                        <td>
+                            <a class="ticket-title" href="{% url 'ticket_detail' ticket.id ticket.ticket_title_slug %}" data-toggle="tooltip" title="{{ticket.description}}">{{ ticket.ticket_title }}</a>
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
+                        <td>
                             <i class="cc-priority {{ticket.priority|getPriority}}"></i>
                             <span>{{ ticket.priority|removeHypens }}</span>
                         </td>
                         <td>
-                            <div class="css-xgstl5">
+                            <div class="user-img-container">
                                 {% if ticket.watcher.all %}
                                     {% for user in ticket.watcher.all %}
-                                    <div class="css-1wdn32l" data-toggle="tooltip" data-title="{{user.username}}">
+                                    <div class="user-tooltip" data-toggle="tooltip" title="{{user.username}}">
                                         {% if user.img_profile %}
-                                        <img  class="rounded-circle css-u226zh" src="/static/{{user.img_profile}}" alt="">
+                                        <img class="rounded-circle user-img-sml" src="/static/{{user.img_profile}}" alt="">
                                         {% else %}
-                                        <img  class="rounded-circle css-u226zh" src="/static/images/user-icon.png" alt="">
+                                        <img class="rounded-circle user-img-sml" src="/static/images/user-icon.png" alt="">
                                         {% endif %}
                                     </div>
                                     {% endfor %}
 
                                 {% else %}
-                                <div style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600; color: #fff;">-</div>
+                                <div class="empty-list">-</div>
                                 {% endif %}
                             </div>
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
+                        <td>
                             {% if ticket.due_date %}
                                 {{ ticket.due_date|date:"Y-m-d" }}
                             {% else %}
                                 -
                             {% endif %}
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
-                            <span class="badge rounded-pill {{ticket.status|getCSSStatus}}">{{ticket.status|getStatus}}</span>
+                        <td >
+                            <span class="badge rounded-pill {{ ticket.status|getCSSStatus }}">{{ ticket.status|getStatus }}</span>
                         </td>
-                        <td style="font-size: 0.875rem; text-transform: capitalize; font-weight: 600;">
+                        <td>
+                            <div class="user-img-container">
+                                {% if ticket.assigned_to.all %}
+                                    {% for user in ticket.assigned_to.all %}
+                                    <div class="user-tooltip" data-toggle="tooltip" title="{{user.username}}">
+                                        {% if user.img_profile %}
+                                        <img class="rounded-circle user-img-sml" src="/static/{{user.img_profile}}" alt="">
+                                        {% else %}
+                                        <img class="rounded-circle user-img-sml" src="/static/images/user-icon.png" alt="">
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+
+                                {% else %}
+                                <div class="empty-list">-</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
                             {{ ticket.requester.username }}
                         </td>
                     </tr>
@@ -149,4 +158,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.vivid-progress').css("width",
+            function() {
+                return $(this).attr("aria-valuenow") + "%";
+            }
+        )
+    });
+</script>
 {% endblock %}

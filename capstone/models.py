@@ -18,7 +18,7 @@ PRIORITY = (
 STATUS = (
     (0, 'Open'),
     (1, 'In Progress'),
-    (2, 'Waiting Approval'),
+    (2, 'In Review'),
     (3, 'Done')
 )
 

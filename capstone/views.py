@@ -64,7 +64,7 @@ def index(request):
         "dueToday" : len(dueToday),
         "overdue" : len(overdue),
         "notifications": notifications,
-        "iconTitle": ICONS[0],
+        "iconTitle": ICONS['dashboard'],
         "titleHeader": "Dashboard",
         "subTitleHeader": "This dasboard is intended to show the tickets progress and personality."
     })
@@ -75,7 +75,7 @@ def category(request):
     
     return render(request, "capstone/category/index.html", {
         "categories": categories,
-        "iconTitle": ICONS[1],
+        "iconTitle": ICONS['category'],
         "titleHeader": "Category",
         "subTitleHeader": "Shows all categories"
     })
@@ -98,6 +98,7 @@ def addCategory(request):
         return HttpResponseRedirect(reverse("category"))
     else:
         return render(request, "capstone/category/create.html", {
+            "iconTitle": ICONS['category'],
             "titleHeader": "Add Category",
             "subTitleHeader": "This page is used to create new category"
         })
@@ -120,6 +121,7 @@ def editCategory(request, id):
     else:
         return render(request, "capstone/category/edit.html", {
             "category": category,
+            "iconTitle": ICONS['category'],
             "titleHeader": "Edit Category",
             "subTitleHeader": "This page is used to edit category name."
         })
@@ -150,25 +152,48 @@ def deleteCategory(request, id):
 #         "tickets": tickets
 #     })
 
-def saveNotification(notif, ticketId, requester):
+def saveNotification(notif, ticketId, requester, watchers='', assignees=''):
 
-    if notif == 1:
-        users = User.objects.filter(is_manager=True)
-        for u in users:
-            notification = Notification(
-                notification = notif,
-                ticket_id = ticketId,
-                send_to_id = u.id,
-                creator_id = requester
-            )
-            notification.save()
+    managerId = list(User.objects.filter(is_manager=1).values_list('id', flat=True))
+    if watchers:
+        allUsers = list(set(managerId + watchers))
+    elif assignees:
+        allUsers = list(set(managerId + assignees))
+    elif watchers and assignees:
+        allUsers = list(set(managerId + watchers + assignees))
+    else:
+        allUsers = managerId
+
+
+    for user in allUsers:
+        notification = Notification(
+            notification = notif,
+            ticket_id = ticketId,
+            send_to_id = user,
+            creator_id = requester
+        )
+        notification.save()
 
     return
+
+@login_required
+def searchTicket(request):
+    searchKeyword = request.GET.get('search_keyword', '')
+    
+    tickets = Ticket.objects.filter(Q(ticket_title__icontains=searchKeyword) | Q(description__icontains=searchKeyword))
+
+    return render(request, "capstone/ticket/ticket_list.html", {
+        "tickets": tickets,
+        "iconTitle": ICONS['list'],
+        "titleHeader": "Search Tickets",
+        "subTitleHeader": "This page shows status of all tickets that has been created."
+    })
 
 @login_required
 def createTicket(request):
         priority = PRIORITY
         softSkills = SOFTSKILLS
+        progressStatus = [status for status in STATUS if status[0] != 0]
         categories = Category.objects.all()
         users = User.objects.filter(is_staff=0)
         categoryRoles = CategoryRole.objects.all()
@@ -180,34 +205,40 @@ def createTicket(request):
             "users": users,
             "priority": priority,
             "softSkills": softSkills,
+            "progressStatus": progressStatus,
             "categoryRoles": categoryRoles,
             "watchers": watchers,
             "requesters": requesters,
-            "iconTitle": ICONS[2],
+            "iconTitle": ICONS['add'],
             "titleHeader": "Create New Ticket",
             "subTitleHeader": "This page is intended to create a ticket for all users."
         })
     
 @login_required
 def ticketDetail(request, ticket_id, ticket_name):
-    ticketName = ticket_name.replace('-', ' ')
+    progressStatus = STATUS
     ticketDetail = Ticket.objects.get(pk=ticket_id)
     categories = Category.objects.all()
     categoryRoles = CategoryRole.objects.all()
     watchers = User.objects.filter(dept=1)
 
     watcherIds = ', '.join([str(watcher.id) for watcher in ticketDetail.watcher.all()])
+    viewWatchers = ticketDetail.watcher.all()
     assignees = ', '.join([assignee.username for assignee in ticketDetail.assigned_to.all()])
+    viewAssignees = ticketDetail.assigned_to.all()
     
     return render(request, "capstone/ticket/ticket_detail.html", {
         "ticketDetail": ticketDetail,
         "categories": categories,
         "priority": PRIORITY,
-        "status": STATUS,
+        "progressStatus": progressStatus,
         "categoryRoles": categoryRoles,
         "watchers": watchers,
         "watcherIds": watcherIds,
+        "viewWatchers": viewWatchers,
+        "viewAssignees": viewAssignees,
         "assignees": assignees.split(', '),
+        "iconTitle": ICONS['detail'],
         "titleHeader": "Ticket Detail" ,
         "subTitleHeader": "You can update and view the ticket detail that has been created."
     })
@@ -229,7 +260,7 @@ def saveTicket(request):
         ticket.save()
 
         if "watchers" in data and "assignees" in data:
-            watchers = data["watchers"]
+            watchers = [int(val) for val in data["watchers"]]
             assignees = data["assignees"]
             if watchers:
                 watcherTicket = Ticket.objects.get(id=ticket.id)
@@ -238,10 +269,12 @@ def saveTicket(request):
             if assignees:
                 assigneeTicket = Ticket.objects.get(id=ticket.id)
                 assignees = [val.lower() for val in assignees]
-                userId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
-                assigneeTicket.assigned_to.add(*list(userId))
+                assigneeId = User.objects.filter(username__in=(assignees)).values_list('id', flat=True)
+                assigneeTicket.assigned_to.add(*list(assigneeId))
 
-        saveNotification(1, ticket.id, request.user.id)
+            saveNotification(1, ticket.id, request.user.id, watchers, list(assigneeId))
+        else:
+            saveNotification(1, ticket.id, request.user.id)
         
         return JsonResponse({
             "msg": "success",
@@ -259,6 +292,11 @@ def saveTicket(request):
             updateTicket.description = data["desc"]
             updateTicket.category_id = data["category"]
             updateTicket.priority = data["priority"]
+            updateTicket.status = data["status"]
+            if data["status"] == "3":
+                updateTicket.is_finished = 1
+            if updateTicket.is_finished and data["status"] != "3":
+                updateTicket.is_finished = 0
             updateTicket.due_date = data["dueDate"]
             updateTicket.save()
 
@@ -266,6 +304,7 @@ def saveTicket(request):
                 updateTicket.watcher.set(data["watchers"])
                 assignees = [User.objects.get(username__icontains=user) for user in data['assignees']]
                 updateTicket.assigned_to.set(assignees)
+
 
             return JsonResponse({
                 "msg": "update success",
@@ -292,7 +331,7 @@ def mbtiResult(request, username):
         return render(request, "capstone/mbti/mbti_result.html", {
             "personalities": mbtiRes,
             "roles": roles,
-            "iconTitle": ICONS[5],
+            "iconTitle": ICONS['result'],
             "titleHeader": "MBTI Result" ,
             "subTitleHeader": "This page is intended to show your MBTI personality."
         })
@@ -332,7 +371,7 @@ def ticketList(request, ticket_name):
         "resolved" : len(resolved),
         "dueToday" : len(dueToday),
         "overdue" : len(overdue),
-        "iconTitle": ICONS[3],
+        "iconTitle": ICONS['list'],
         "titleHeader": ticket_name.replace("_", " ").capitalize() + " Tickets" ,
         "subTitleHeader": "This page shows status of all tickets that has been created."
     })
@@ -375,7 +414,7 @@ def users(request):
 @login_required
 def questionnaire(request, username):
     return render(request, "capstone/mbti/questionnaire.html", {
-        "iconTitle": ICONS[4],
+        "iconTitle": ICONS['questionnaire'],
         "titleHeader": "Questionnaire" ,
         "subTitleHeader": "This page is used to know your personality according to MBTI test."
     })
@@ -393,21 +432,32 @@ def notification(request):
     notifications = Notification.objects.filter(send_to=userId).order_by('-create_date')
     return render(request, "capstone/notification/index.html", {
         "notifications": notifications,
+        "iconTitle": ICONS['notification'],
         "titleHeader": "Notifications" ,
         "subTitleHeader": "This page is intended to show you all incoming notifications."
     })
 
+@login_required
+def readTicket(request, ticket_id):
+    notif = Notification.objects.get(ticket_id=ticket_id, send_to=request.user.id)
+
+    notif.is_read = True
+    notif.save()
+
+    slug = notif.ticket.ticket_title_slug()
+    return HttpResponseRedirect(reverse("ticket_detail", args=[notif.ticket.id, slug]))
 
 @login_required
 def saveQuestionnaire(request):
-    q1 = request.POST["q1"]
-    q2 = request.POST["q2"]
-    q3 = request.POST["q3"]
-    q4 = request.POST["q4"]
-    ess1 = request.POST["ess1"]
-    ess2 = request.POST["ess2"]
-
+    data = json.loads(request.body)
+    q1 = data['q1']
+    q2 = data['q2']
+    q3 = data['q3']
+    q4 = data['q4']
+    ess1 = data['ess1']
+    ess2 = data['ess2']
     
+    print("hellooooooo")
     newQ1 = MBTI_QUESTIONNAIRE_VALUE[1][0] if q1 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[1][1]
     newQ2 = MBTI_QUESTIONNAIRE_VALUE[2][0] if q2 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[2][1]
     newQ3 = MBTI_QUESTIONNAIRE_VALUE[3][0] if q3 in ('1', '2') else MBTI_QUESTIONNAIRE_VALUE[3][1]
@@ -428,8 +478,12 @@ def saveQuestionnaire(request):
         role = Role(user_id=request.user.id, role_type_id=val['id'], is_best=val['is_best'])
         role.save()
 
-    messages.success(request, "You have submitted the questionnaire", extra_tags="MBTI Questionnaire")
-    return HttpResponseRedirect(reverse('mbti_result', args=[request.user.username]))
+    # messages.success(request, "You have submitted the questionnaire", extra_tags="MBTI Questionnaire")
+    # return HttpResponseRedirect(reverse('mbti_result', args=[request.user.username]))
+    return JsonResponse({
+        "status": 200,
+        "message": "MBTI has been proceeded"
+    }, status = 200)
 
 def execMBTIModel(sentences):
     cols = ['INTJ', 'INTP', 'ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'INFJ', 'INFP']

@@ -52,47 +52,68 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 dflex gap20">
-            <div class="dflex gap15 mb20">
-                <div class="css-vz2i8e">
-                    <div class="css-63xtou">
-                        <label class="css-1bw07gz" style="color: #b0b0b0;">Priority</label>
-                    </div>
-                    <div class="form-control-wrapper">
-                        <select id="ticket_priority" class="form-caps form-select" name="priority" style="background: transparent;
-                        outline: none; width: 100%;
-                        border: none; z-index: 1;
-                        padding: 12px 15px; cursor: pointer; font-size: .88rem;" required>
-                            <option selected>Select Priority</option>
-                            {% for pr in priority %}
-                                <option value="{{ pr.0 }}"> {{ pr.1 }}</option>
-                            {% endfor %}
-                        </select>
-                        <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
-                            <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
-                    <div class="invalid-feedback">
-                        Priority cannot be empty
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% if request.user.is_manager %}
-        <div class="dflex gap20 alg-bal">
+        <div class="dflex">
             <div class="col-md-3 dflex gap20">
                 <div class="dflex gap15 mb20">
                     <div class="css-vz2i8e">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Priority</label>
+                        </div>
+                        <div class="form-control-wrapper">
+                            <select id="ticket_priority" class="form-caps form-select custom-form-select" name="priority" required>
+                                <option selected>Select Priority</option>
+                                {% for pr in priority %}
+                                    <option value="{{ pr.0 }}"> {{ pr.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
+                                <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div class="invalid-feedback">
+                            Priority cannot be empty
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if request.user.dept == 1 or request.user.is_manager %}
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20">
+                    <div class="css-vz2i8e">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #b0b0b0;">Ticket Status</label>
+                        </div>
+                        <div class="form-control-wrapper">
+                            <select id="ticket_status" class="form-caps form-select custom-form-select" name="status">
+                                <option value="0" selected>Open</option>
+                                {% for status in progressStatus %}
+                                    <option value="{{ status.0 }}"> {{ status.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
+                                <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if request.user.is_manager %}
+        <div class="dflex gap20 alg-bal">
+            <div class="col-md-3 dflex gap20">
+                <div class="dflex gap15 mb20" style="width: 100%;">
+                    <div style="width: 100%;">
                         <div class="css-63xtou dflex alg-bal jst-spc-btw">
                             <label class="css-1bw07gz" style="color: #b0b0b0;">Watcher</label>
                         </div>
                         <div class="form-control-wrapper">
-                            <select id="watcher" class="form-caps form-select js-example-basic-multiple" multiple="multiple" name="watchers[]" style="background: transparent;
-                            outline: none; width: 100%;
-                            border: none; z-index: 1;
-                            padding: 12px 15px; cursor: pointer; font-size: .88rem;" data-placeholder="Select Watcher">
+                            <select id="watcher" class="form-caps form-select js-example-basic-multiple custom-form-select" multiple="multiple" name="watchers[]" data-placeholder="Select Watcher">
                                 <option></option>
                                 {% for watcher in watchers %}
                                     <option value="{{ watcher.id }}"> {{ watcher.username|title }}</option>
@@ -105,7 +126,7 @@
             </div>
             <div class="col-md-3 dflex gap20">
                 <div class="dflex gap15 mb20" style="width: 100%;">
-                    <div class="css-vz2i8e">
+                    <div style="width: 100%;">
                         <div class="css-63xtou dflex alg-bal jst-spc-btw">
                             <label class="css-1bw07gz" style="color: #b0b0b0;">Assigned to</label>
                             <div class="add-user-container" id="add_assignee">

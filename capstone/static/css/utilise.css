@@ -62,6 +62,10 @@
     flex-direction: column;
 }
 
+.gap5 {
+    gap: 5px;
+}
+
 .gap10 {
     gap: 10px;
 }
@@ -102,6 +106,12 @@
     border-radius: 20px;
 }
 
+.btn-cap-primary:hover {
+    color: #ffffff;
+    text-decoration: none;
+    background: rgb(38 103 179);
+}
+
 .btn-cap-outline-danger {
     position: relative;
     box-sizing: border-box;
@@ -115,6 +125,11 @@
     background-color: transparent;
     color: #d25500;
     border-radius: 20px;
+}
+
+.btn.btn-cap-outline-danger:hover {
+    background: #d25500;
+    color: #d5cdcd;
 }
 
 .invalid-feedback {

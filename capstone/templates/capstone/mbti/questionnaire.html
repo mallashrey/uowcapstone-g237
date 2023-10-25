@@ -1,12 +1,12 @@
 {% extends 'capstone/layout.html' %}
 
 {% block body %}
-<div class="container-card dash-card mt20 mb50">
+<div class="container-card dash-card mt20 mb50" style="width: 60%;">
     <div>
-        <div style="display: flex; flex-direction: column;">
+        <div class="dflex flex-col">
             <div class="container test124">
                 <div style="padding: 20px;">
-                    <form id="msform" action="{% url 'save_questionnaire' %}" method="post">
+                    <div id="msform">
                         {% csrf_token %}
                         <!-- progressbar -->
                         <ul id="progressbar">
@@ -129,18 +129,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                                <input type="submit" name="submit" class="submit action-button" value="Submit"/>
-                            </div>
+                            <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                            <input class="submit action-button btn-questionnaire" value="Submit"/>
                             
                         </fieldset>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<input type="hidden" name="username" value="{{request.user.username}}">
 <script>
     
 //jQuery time
@@ -154,7 +153,6 @@ $(".next").click(function(){
 	
 	current_fs = $(this).parent();
 	next_fs = $(this).parent().next();
-	
 	//activate next step on progressbar using the index of next_fs
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 	
@@ -192,7 +190,6 @@ $(".previous").click(function(){
 	
 	current_fs = $(this).parent();
 	previous_fs = $(this).parent().prev();
-	
 	//de-activate current step on progressbar
 	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 	
@@ -209,7 +206,7 @@ $(".previous").click(function(){
 			//3. increase opacity of previous_fs to 1 as it moves in
 			opacity = 1 - now;
 			current_fs.css({'left': left});
-			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity, 'position': 'relative'});
 		}, 
 		duration: 800, 
 		complete: function(){

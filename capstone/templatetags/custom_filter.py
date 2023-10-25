@@ -14,14 +14,14 @@ priority = {
 status = {
     0: ["open", "bg-pill-open"],
     1: ["in progress", "bg-pill-progress"],
-    2: ["waiting approval", "bg-pill-waiting"],
+    2: ["in review", "bg-pill-waiting"],
     3: ["done", "bg-pill-done"],
 }
 
 progress = {
     0: 0,
-    1: 40,
-    2: 70,
+    1: 33.33,
+    2: 66.66,
     3: 100
 }
 

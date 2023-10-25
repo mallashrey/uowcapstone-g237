@@ -75,9 +75,9 @@ function dateFormat(dateVal, type='short') {
         options = { year: 'numeric', month: 'long', day: 'numeric' };
     } else {
         options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric',
-                    minute: 'numeric', hour12: true };
+                    minute: 'numeric', hour12: true, timeZone: 'UTC' };
     }
-    newDate = date.toLocaleDateString('en-US', options);
+    newDate = date.toLocaleDateString('en-AU', options);
     newDate = newDate.replace(" at", "");
     return newDate;
 }
