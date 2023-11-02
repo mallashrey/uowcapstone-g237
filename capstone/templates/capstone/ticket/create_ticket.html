@@ -78,30 +78,7 @@
                     </div>
                 </div>
             </div>
-            {% if request.user.dept == 1 or request.user.is_manager %}
-            <div class="col-md-3 dflex gap20">
-                <div class="dflex gap15 mb20">
-                    <div class="css-vz2i8e">
-                        <div class="css-63xtou">
-                            <label class="css-1bw07gz" style="color: #b0b0b0;">Ticket Status</label>
-                        </div>
-                        <div class="form-control-wrapper">
-                            <select id="ticket_status" class="form-caps form-select custom-form-select" name="status">
-                                <option value="0" selected>Open</option>
-                                {% for status in progressStatus %}
-                                    <option value="{{ status.0 }}"> {{ status.1 }}</option>
-                                {% endfor %}
-                            </select>
-                            <svg class="arrow" style="position: absolute; right: 0;" id="drp-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg" class="transition-all ml-auto rotate-180">
-                                <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
+            
         </div>
         
         {% if request.user.is_manager %}

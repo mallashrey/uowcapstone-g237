@@ -38,6 +38,10 @@
     border-radius: 10px;
 }
 
+.dnone {
+    display: none!important;
+}
+
 .dflex {
     display: flex;
 }

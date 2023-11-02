@@ -10,7 +10,8 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="app-sidebar__heading">Main</li>
+            {% if request.user.dept == 1 %}
+            <li class="app-sidebar__heading">Category</li>
             <li>
                 <a href="{% url 'category' %}" class="{% if 'category' in request.path %} mm-active {% endif %}">
                     <svg viewBox="0 0 640 512" fill="currentColor" class="menu-icon">
@@ -19,6 +20,7 @@
                     Category
                 </a>
             </li>
+            {% endif %}
             <li class="app-sidebar__heading">Ticket</li>
             <li>
                 <a href="{% url 'create_ticket' %}" class="{% if 'create_ticket' in request.path %} mm-active {% endif %}">
@@ -37,6 +39,7 @@
                     Ticket List
                 </a>
             </li>
+            {% if request.user.dept == 1 %}
             <li class="app-sidebar__heading">Personality</li>
             <li>
                 <a href="{% url 'questionnaire' request.user.username %}" class="{% if 'questionnaire' in request.path %} mm-active {% endif %}">
@@ -54,6 +57,7 @@
                     MBTI Result
                 </a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </div>

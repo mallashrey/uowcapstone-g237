@@ -70,6 +70,30 @@ ul {
     list-style-type: none;
 }
 
+input[type=file], input[type=file]::-webkit-file-upload-button {
+    cursor: pointer;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #677279;
+    cursor: pointer
+}
+
+.active-row {
+    background-color: #6987a2;
+}
+
+.btn-info.disabled, .btn-info:disabled {
+    color: #fff;
+    background-color: #16aaff;
+    border-color: #16aaff
+}
+
+.btn.disabled, .btn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
 .app-container {
     display: flex;
     min-height: 100vh;
@@ -1993,4 +2017,42 @@ svg {
     100%, 0% {
         transform: scale(1.0);
     }
+}
+
+.profile-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.upload-btn-overlay {
+    width: 35px;
+    height: 35px;
+    background-color: #565b73;
+    border-radius: 100%;
+    -webkit-box-align: center;
+    cursor: pointer;
+    position: absolute;
+}
+
+.upload-btn {
+    top: 30px;
+    left: 45px;
+}
+
+.uploadfile {
+    bottom: 0px;
+    left: 0;
+    top: 0px;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 3;
+}
+
+.upl-icon-pos-abs {
+    position: absolute;
+    top: 35px;
+    left: 56px;
 }

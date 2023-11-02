@@ -144,6 +144,7 @@ function getNotification(userId) {
     fetch(`/async_notification/${userId}`)
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             totalNotif = document.querySelector('.notification-number');
             notifContainer = document.querySelector('.notif-list');
             notifContainer.innerHTML = "";
@@ -269,28 +270,49 @@ $(document).on('click', 'input[name="assigned_to[]"]', function(e) {
 
 $(document).on('change', '#category_role', function(event) {
     roleId = event.target.value;
+    table.innerHTML = ""
+    if (roleId != 0) {
+        fetch(`/get_role/${roleId}`)
+        .then(response => response.json())
+        .then(data => {
+            reqRole = document.querySelector('#requirements-role')
+            reqRole.innerHTML = ""
+            for (let role in data) {
+                reqRole.innerHTML += `<div class="form-check">
+                <input class="form-check-input" name=reqRole[] value=${role} type="checkbox" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                ${data[role]}
+                </label>
+            </div>`
+            }
 
-    fetch(`/get_role/${roleId}`)
-    .then(response => response.json())
-    .then(data => {
-        reqRole = document.querySelector('#requirements-role')
+            // test123 = `<button class="btn btn-primary" id="proceed">Next</button>`
+
+            // reqRole.insertAdjacentHTML("beforeend", test123)
+            $('#searchEmployeeBtn').removeClass('dnone')
+            $('#searchEmployeeBtn').prop('disabled', true);
+            $('#setAssignee').prop('disabled', true);
+            $('#setAssignee').addClass('dnone')
+        })
+    } else {
+        $('#searchEmployeeBtn').addClass('dnone')
+        $('#setAssignee').prop('disabled', true);
+        $('#setAssignee').addClass('dnone')
+        table.innerHTML = ""
         reqRole.innerHTML = ""
-        for (let role in data) {
-            reqRole.innerHTML += `<div class="form-check">
-            <input class="form-check-input" name=reqRole[] value=${role} type="checkbox" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-            ${data[role]}
-            </label>
-          </div>`
-        }
-
-        test123 = `<button class="btn btn-primary" id="proceed">Next</button>`
-
-        reqRole.insertAdjacentHTML("beforeend", test123)
-    })
+    }
+    
 })
 
-$(document).on('click', '#proceed', function(event) {
+$(document).on('click', 'input[name="reqRole[]"]', function(event) {
+    if ($('input[name="reqRole[]"]:checked').length > 0) {
+        $('#searchEmployeeBtn').prop('disabled', false);
+    } else {
+        $('#searchEmployeeBtn').prop('disabled', true);
+    }
+});
+
+$(document).on('click', '#searchEmployeeBtn', function(event) {
     const token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
     var selectedValues = Array.from(document.querySelectorAll('input[name="reqRole[]"]:checked'))
@@ -312,7 +334,7 @@ $(document).on('click', '#proceed', function(event) {
     .then(response => response.json())
     .then(data => {
         table.innerHTML = `<div class="app-card__body">
-                                <table class="table" id="user_score" style="background: #3d4e58;">
+                                <table class="table table-hover" id="user_score" style="background: #3d4e58;">
                                     <thead>
                                         <tr>
                                             <th class="table-th-header" scope="col" style="width:35%;">User</th>
@@ -339,9 +361,12 @@ $(document).on('click', '#proceed', function(event) {
 })
 
 
-
 $(document).on('click', '#user_score tbody tr', function(e) {
+    $('#user_score tbody tr').removeClass('active-row');
+    $(this).addClass('active-row')
     selectedUser = $(this).data('name');
+    $('#setAssignee').prop('disabled', false);
+    $('#setAssignee').removeClass('dnone')
 })
 
 $(document).on('click', '#setAssignee', function() {
@@ -371,7 +396,9 @@ $(document).on('click', '#btn-save-ticket', function() {
         return this.value;
     }).get()
     dueDate = $("#due-date").val();
-    console.log(assignees)
+    if (!ticket_status) {
+        ticket_status = 0
+    }
 
     fetch('/save_ticket', {
         method: 'POST',

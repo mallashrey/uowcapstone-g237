@@ -171,7 +171,7 @@ class Notification(models.Model):
         channel_layer = get_channel_layer()
         notification_objs = Notification.objects.filter(is_read=False).count()
         data = {'count': notification_objs, 'msg': self.notification, 'requester': self.creator.id, 'receiver': self.send_to.id}
-
+        print(self.ticket.id)
         async_to_sync(channel_layer.group_send) (
             'test_consumer_group', {
                 'type': 'send_notification',

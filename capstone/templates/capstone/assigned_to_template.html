@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
+                <button type="button" id="btn-close" class="btn-search-close d-flex align-items-center justify-content-center" data-bs-dismiss="modal" aria-label="Close">
                     <!-- <span aria-hidden="true" class="ion-ios-close"></span> -->
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,7 +12,7 @@
                 <div class="icon d-flex align-items-center justify-content-center mb-4 flex-col">
                     <div class="col-md-12 search-wrapper">
                         <select class="form-control" name="category_role" id="category_role">
-                            <option selected>Select requester</option>
+                            <option value="0" selected>Select requester</option>
                             {% for req in categoryRoles %}
                             <option value="{{ req.id }}"> {{ req.role_name|title }}</option>
                             {% endfor %}
@@ -20,16 +20,17 @@
                     </div>
                     
                 </div>
-                <div class="scroll-area-sm">
+                <div class="scroll-area-md">
                     <div class="scrollbar-container ps--active-y">
                         <div id="requirements-role"></div>
-                        <div id="assignee-list"></div>
+                        <div id="assignee-list" style="margin-top: 20px;"></div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" id="setAssignee" class="btn btn-info" disabled> Select Assignee </button>
-                </div>
+            <div class="modal-footer jst-spc-btw">
+                <button type="button" id="searchEmployeeBtn" class="btn btn-primary dnone" disabled> Search employee </button>
+                <button type="button" id="setAssignee" class="btn btn-info dnone" disabled> Select Assignee </button>
+            </div>
         </div>
     </div>
 </div>

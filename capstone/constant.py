@@ -6,7 +6,8 @@ ICONS = {
     "questionnaire": "fa-regular fa-rectangle-list",
     "result": "fa-solid fa-users",
     "notification": "fa-solid fa-bell",
-    "detail": "fa-solid fa-file-pen"
+    "detail": "fa-solid fa-file-pen",
+    "profile": "fa-solid fa-id-card"
 }
 
 SOFTSKILLS = (

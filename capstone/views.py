@@ -356,8 +356,9 @@ def ticketList(request, ticket_name):
             dueToday = getTickets("due_today", True)
             overdue = getTickets("overdue", True)
         else:
+            print("b")
             tickets = getTickets(ticket_name, False, userId).order_by('-due_date')
-            outstanding = getTickets("outstanding", False, True)
+            outstanding = getTickets("outstanding", False, userId)
             allTicket = getTickets("all", False, userId)
             resolved = getTickets("resolved", False, userId)
             dueToday = getTickets("due_today", False, userId)
@@ -404,7 +405,7 @@ def getTickets(ticket_name, is_manager=False, userId=""):
             tickets = Ticket.objects.filter(due_date__lt = today).exclude(status=3, is_finished=1)
         else:
             tickets = Ticket.objects.filter((Q(requester=userId) | Q(assigned_to__in=[userId]) | Q(watcher=userId)), due_date__lt = today).exclude(status=3, is_finished=1).distinct()
-
+    
     return tickets
 
 @login_required
@@ -422,8 +423,9 @@ def questionnaire(request, username):
 @login_required
 def profile(request):
     return render(request, "capstone/profile/index.html", {
+        "iconTitle": ICONS['profile'],
         "titleHeader": "Profile" ,
-        "subTitleHeader": "This is an example dashboard created using build-in elements and components."
+        "subTitleHeader": "You can modify your profile on this page."
     })
 
 @login_required
@@ -636,6 +638,7 @@ def calculate_candidate_score(mbti_trait, skill_weightages, skills_to_mbti):
     return score
 
 def asyncNotification(request, userId):
+    print(userId)
     notifications = Notification.objects.filter(send_to=userId).order_by('-create_date')
     return JsonResponse([notif.serialize() for notif in notifications], safe=False)
 

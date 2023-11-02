@@ -4,7 +4,7 @@
 
 {% block body %}    
 
-    {% include "capstone/dashboard/ticket-card.html" %}
+    {% include "capstone/dashboard/header.html" %}
 
     <div class="row" style="gap: 25px;">
         <div class="welcome-board-container">
@@ -23,6 +23,7 @@
             </div>
         </div>
         
+        {% if request.user.dept == 1 %}
         <div class="container-card dash-card">
             <div style="padding: 20px;">
                 <div class="app-card__header_title mb30" style="text-align: center;">
@@ -82,8 +83,10 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
     
-    {% include "capstone/dashboard/project.html" %}
+    
+    {% include "capstone/dashboard/ticket.html" %}
 
 {% endblock %}

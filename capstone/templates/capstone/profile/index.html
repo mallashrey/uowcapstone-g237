@@ -7,8 +7,86 @@
             Your Profile
         </div>
         <div class="app-card__body">
-
+            <form action="" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #fff;">First Name</label>
+                        </div>
+                        <div style="padding-left: 5px;">
+                            <input type="text" class="css-r6q3am" name="firstName" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #fff;">Last Name</label>
+                        </div>
+                        <div style="padding-left: 5px;">
+                            <input type="text" class="css-r6q3am" name="lastName" placeholder="Last Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #fff;">Username</label>
+                        </div>
+                        <div style="padding-left: 5px;">
+                            <input type="text" class="css-r6q3am" name="username" placeholder="Username" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="css-63xtou">
+                            <label class="css-1bw07gz" style="color: #fff;">Email</label>
+                        </div>
+                        <div style="padding-left: 5px;">
+                            <input type="text" class="css-r6q3am" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="col-md-3">
+                        <div class="position-relative form-group">
+                            <label class="css-1bw07gz" style="color: #fff; margin-bottom: 20px;">Upload Profile</label>
+                            <div>
+                                {% if user.img_profile %}
+                                <img id="profile-img" class="profile-img" src="/static/{{ user.img_profile }}" alt="">
+                                {% else %}
+                                <img id="profile-img" class="profile-img" src="/static/images/user-icon.png" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="upload-btn-overlay upload-btn">
+                                <input type='file' name="profile-img" onchange="changeImg(this);" class="uploadfile" />
+                            </div>
+                            <div class="upl-icon-pos-abs">
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="margin-top: 20px; display: flex; column-gap: 20px;">
+                        <a id="cancel-profile-btn" class="button btn-secondary" href="javascript:void(0);">Cancel</a>
+                        <button type="submit" id="save-profile-btn" class="button btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+    function changeImg(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profile-img').attr('src', e.target.result);
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 {% endblock %}
