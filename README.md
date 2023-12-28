@@ -38,14 +38,16 @@ Follow these steps to set up the project:
 5. Activate the virtual environment:
    
     ```bash
-    source myvenv/bin/activate
+    python -m venv myvenv
+    cd myvenv\Scripts
+    activate
     ```
 
 6. Copy these commands below to install dependencies.
 
     ### For windows
     ```bash
-    pip install daphne, django-extensions, channels, tqdm, pandas, tensorflow, transformers
+    pip install daphne django-extensions channels tqdm pandas tensorflow transformers
     ```
 
     ### For Mac
